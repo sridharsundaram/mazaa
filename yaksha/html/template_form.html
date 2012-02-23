@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Template</title>
+</head>
+<body>
+<h1> Create/Edit Template</h1>
+<form name="template" action="template" method="post" enctype="multipart/form-data">
+<input type="hidden" name="_key" value="{% if template.is_saved %}{{template.key}}{% endif %}">
+<input type="hidden" name="problemName" value="{{problemName}}">
+<table>
+<tr><td>Problem Name: </td> <td>
+{{problemName}}
+</td></tr>
+
+<tr><td>Variables: </td><td>
+<div id="vars">
+  <table>
+    {% for variable in variables %}
+      <tr><td>{{variable.name}}</td>
+        <td>
+        <select name="{{variable.name}}">
+          <option value="any" {% ifequal variable.type "any" %}selected{% endifequal %}>As per problem</option>
+          <option value="whole" {% ifequal variable.type "whole" %}selected{% endifequal %}>Whole Number</option>
+          <option value="int" {% ifequal variable.type "int" %}selected{% endifequal %}>Integer</option>
+          <option value="frac" {% ifequal variable.type "frac" %}selected{% endifequal %}>Fraction</option>
+          <option value="dec" {% ifequal variable.type "dec" %}selected{% endifequal %}>Decimal</option>
+        </select></td>
+      </tr>
+    {% endfor %}
+  </table>
+      
+</div>
+</td>
+<tr><td>Body</td> <td>
+<textarea name="body" rows="10" cols="25">{{template.body}}</textarea>
+ </td></tr>
+
+</td>
+<tr><td>Preview</td> <td>
+{{preview}}
+ </td></tr>
+
+</table>
+<input name="action" type="submit" value="Submit">
+<input name="action" type="submit" value="Preview">
+<input name="action" type="submit" value="Delete">
+</form>
+</body>
+</html>

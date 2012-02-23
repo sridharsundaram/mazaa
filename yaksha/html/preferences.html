@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Sixth Maths CBSE</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="stylesheets/std_treelook.css">
+<script type="text/javascript" language="JavaScript" src="nanotree.js"></script>
+<script type="text/javascript" language="JavaScript">
+showRootNode = true;
+sortNodes = false;
+dragable = false;
+
+/**
+* Needed to initialize the tree.
+* And to call showTree(imagePath); to actually show the tree.
+* Alternatively this can be done in a script block at the bottom of the page.
+* Though this method is somewhat cleaner.
+*/
+function init() {
+	container = document.getElementById('syllabusdiv');
+	showTree('');
+}
+/**
+* Called when a user clicks on a node.
+* @param treeNode the TreeNode object which have been clicked.
+*/
+function standardClick(treeNode) {
+	var mytext = document.getElementById('mytext');
+	var param = treeNode.getParam();
+
+	mytext.innerHTML = (param == '') ? treeNode.getName() : param;
+}
+function nodeEdited(treeNode) {
+
+}
+
+function populateTree(node, labels, id) {
+  for (var i = 0; i < labels.length; i++) {
+    if (labels.length > i + 1 && typeof(labels[i + 1]) == 'object') {
+      icon = new Array(closedGif, openGif)
+      var n = new TreeNode(id++, labels[i].split(':'), icon);
+      node.addChild(n);
+      id = populateTree(n, labels[++i], id);
+    } else {
+      node.addChild(new TreeNode(id++, labels[i].split(':'), pageIcon));
+    }
+  }
+  return id;
+}
+var closedGif = 'images/folder_closed.gif';
+var openGif = 'images/folder_open.gif';
+var pageIcon = 'images/page16x16.gif';
+var userIcon = 'images/user_16x16.gif';
+var helpIcon = 'images/help_16x16.gif';
+
+rootNode = new TreeNode(1,'Sixth Maths CBSE');
+
+labels = {{syllabus}};
+populateTree(rootNode, labels, 1);
+
+</script>
+<style type="text/css">
+div,p,a {
+	font-family: Verdana,Arial;
+	font-size: 11px;
+}
+#syllabustable {
+	width: 100%;
+	height: 100%;
+}
+#syllabusdiv {
+	width: 250px;
+	height: 100%;
+	overflow: auto;
+}
+.explanation {
+	font-weight: bold;
+	font-style: italic;
+}
+</style>
+</head>
+<body OnLoad="init();">
+<form name="configure" action="configure" method="post">
+<table class="syllabustable">
+<tr>
+<td align="top">
+<div id="syllabusdiv" class="syllabusdiv"></div>
+</td>
+<td align="top">
+  <table>
+    <tr><td>User Name</td>
+        <td><input size="20" name="username" value="{{username}}"> </td>
+   </tr>
+
+   <tr>
+       <td>Domain</td> 
+       <td>
+          <select name="domainType">
+            <option value="whole" {% ifequal domainType "whole" %}selected {% endifequal %} >Whole Numbers</option> 
+            <option value="int" {% ifequal domainType "int" %}selected {% endifequal %} >Integers</option>
+            <option value="frac"  {% ifequal domainType "frac" %}selected {% endifequal %} >Fractions</option>
+            <option value="dec" {% ifequal domainType "dec" %}selected {% endifequal %} >Decimals</option>
+            <!--  <option value="real" {% ifequal domainType "real" %}selected {% endifequal %} >Reals</option> -->
+            <!-- <option value="complex">Complex</option> --> 
+          </select>
+        </td>
+   </tr>
+
+   <tr>
+      <td>Type</td>
+      <td>
+         <select name="questionType">
+           <option value="mc" {% ifequal questionType "mc" %}selected {% endifequal %} >Multiple Choice</option>
+           <option value="text" {% ifequal questionType "text" %}selected {% endifequal %} >Text</option>
+         </select>
+      </td>
+    </tr>
+
+    <tr>
+       <td>Questions per screen</td>
+       <td><input name="numquestions" value="9" maxlength="1" size="1"></td>
+    </tr>
+    
+    <tr>
+       <td>Answer Mode</td>
+       <td>
+          <input type="Checkbox" {% ifequal "on" answermode %}checked {% endifequal %}  name="answermode">Show Answers</input>
+       </td>
+    </tr>
+
+  </table>
+  <input type="submit" value="Submit">
+</td>
+</tr></table>
+</form>
+</body></html>

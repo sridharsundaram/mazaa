@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Template</title>
+</head>
+<body>
+<h1> Find Template</h1>
+<form name="findtemplate" action="findtemplate" method="post" enctype="multipart/form-data">
+<input name="problemName" id="problemName" type="hidden">
+<table>
+<tr><td>Problem</td> <td>
+<select name="problemName" onChange="document.getElementById("problemName").value = this.value;">
+{% for problem in problems %}
+  <option {% ifequal problem problemName %} selected {% endifequal %}>
+    {{problem}}
+  </option>
+{% endfor %}
+ </td>
+ <td>
+ <input type="submit" value="Go">
+ </td>
+ </tr>
+{% if problemName %}
+<tr><td>Variables</td><td>
+<div id="vars">{{variables}}</div>
+</td>
+</tr>
+{% endif %}
+</table>
+{% if problemName %}
+
+  {% for template in templates %}
+    <p>
+    <a href="template?_key={{template.key}}">{{template.body}}</a>
+    </p>
+  {% endfor %}
+  <p>
+  <a href="template?problemName={{problemName}}">New</a>
+{% endif %}
+
+</form>
+<script>
+  showVariables(document.forms[0].problemName.value);
+</script>
+</body>
+</html>

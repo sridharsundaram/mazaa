@@ -1,0 +1,42 @@
+.gcal_head {
+font-weight: bold;
+height: 25px;
+padding: 5px 10px 5px 5px;
+vertical-align: middle;
+white-space: nowrap;
+background-color: #5B7795;
+color: #FFFFFF;
+font-family: verdana,arial,helvetica;
+font-size:   7.5pt;
+}
+.gcal_pop {
+background-color: #FFFFFF;
+border: 2px solid;
+padding: 3px 3px 3px 3px;
+overflow: hidden;
+}
+.gcalp_year    {
+height: 18px; text-align:
+center; font-size: 7.50pt;
+font-weight:  bold;
+font-family: verdana,arial,helvetica;
+font-size:   7.5pt;
+}
+.gcalp_day     {
+text-align: center;
+font-family: verdana,arial,helvetica;
+font-size:   7.5pt;
+}
+.gcal_apply  {
+cursor: pointer;
+font-family: verdana,arial,helvetica;
+font-size:   7.5pt;
+}
+.gcal_close      {
+border: 1px solid #FFFFFF;
+color: #FFFFFF;
+text-decoration: none;
+}
+.gcal_icon   {
+cursor: pointer;
+}

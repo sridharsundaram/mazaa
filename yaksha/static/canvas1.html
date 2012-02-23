@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<body onload="init();">
+<canvas id="canvas" width="400" height="200"></canvas>
+
+<script type="text/javascript">
+var imageReady = false;
+var img = new Image();
+img.onload = function() { prepareImage();};
+//User Variables
+img.src = 'http://upload.wikimedia.org/wikipedia/commons/8/83/Capitan_Meadows%2C_Yosemite_National_Park.jpg';
+var CanvasXSize = 400;
+var CanvasYSize = 200;
+var speed = 30; //lower is faster
+var scale = 1.05;
+var y = -4.5; //vertical offset
+//End User Variables
+
+// Image preparation
+var dx = 0.75;
+var imgW, imgH, clearX, clearY, x;
+
+function prepareImage() {
+  imgW = img.width*scale;
+  imgH = img.height*scale;
+  x = 0;
+  if (imgW > CanvasXSize) { x = CanvasXSize-imgW; } // image larger than canvas
+  clearX;
+  clearY;
+  if (imgW > CanvasXSize) { clearX = imgW; } // image larger than canvas
+  else { clearX = CanvasXSize; }
+  if (imgH > CanvasYSize) { clearY = imgH; } // image larger than canvas
+  else { clearY = CanvasYSize; }
+  imageReady = true;
+}
+var ctx;
+
+function init() {
+    //Get Canvas Element
+    ctx = document.getElementById('canvas').getContext('2d');
+    //Set Refresh Rate
+    return setInterval(draw, speed);
+}
+
+function draw() {
+    if (!imageReady) return;
+    //Clear Canvas
+    ctx.clearRect(0,0,clearX,clearY);
+    //If image is <= Canvas Size
+    if (imgW <= CanvasXSize) {
+        //reset, start from beginning
+        if (x > (CanvasXSize)) { x = 0; }
+        //draw aditional image
+        if (x > (CanvasXSize-imgW)) { ctx.drawImage(img,x-CanvasXSize+1,y,imgW,imgH); }
+    }
+    //If image is > Canvas Size
+    else {
+        //reset, start from beginning
+        if (x > (CanvasXSize)) { x = CanvasXSize-imgW; }
+        //draw aditional image
+        if (x > (CanvasXSize-imgW)) { ctx.drawImage(img,x-imgW+1,y,imgW,imgH); }
+    }
+    //draw image
+    ctx.drawImage(img,x,y,imgW,imgH);
+    //amount to move
+    x += dx;
+}
+</script>
+</body>
+</html>

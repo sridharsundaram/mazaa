@@ -1,0 +1,21 @@
+from datamodel.problemtemplate import ProblemTemplate
+from datamodel.variable import Variable
+
+t = ProblemTemplate.all().filter('problemName', 'InverseProportionRatioProblem').fetch(1)
+print t
+
+variables = Variable.all().ancestor(t[0])
+vnames = [ v.name for v in variables]
+print vnames
+
+# to initialize templates
+from init import initTemplatesInDb
+
+initTemplatesInDb(force = True)
+print "done"
+
+# to initialize syllabus
+from init import initSyllabusInDb
+
+initSyllabusInDb(force = True)
+print 'done'

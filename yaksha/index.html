@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>NanoTree</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="stylesheets/std_treelook.css">
+<script type="text/javascript" language="JavaScript" src="static/nanotree.js"></script>
+<script type="text/javascript" language="JavaScript">
+showRootNode = false;
+sortNodes = false;
+dragable = false;
+
+/**
+* Needed to initialize the tree.
+* And to call showTree(imagePath); to actually show the tree.
+* Alternatively this can be done in a script block at the bottom of the page.
+* Though this method is somewhat cleaner.
+*/
+function init() {
+	container = document.getElementById('examplediv');
+	showTree('');
+}
+/**
+* Called when a user clicks on a node.
+* @param treeNode the TreeNode object which have been clicked.
+*/
+function standardClick(treeNode) {
+	var mytext = document.getElementById('mytext');
+	var param = treeNode.getParam();
+	
+	mytext.innerHTML = (param == '') ? treeNode.getName() : param;
+}
+function nodeEdited(treeNode) {
+
+}
+var closedGif = 'images/folder_closed.gif';
+var openGif = 'images/folder_open.gif';
+var pageIcon = 'images/page16x16.gif';
+var userIcon = 'images/user_16x16.gif';
+var helpIcon = 'images/help_16x16.gif';
+
+rootNode = new TreeNode(1,'RootNode');
+
+var node1 = new TreeNode(2,'subpage 1',helpIcon,'<P>This treenode can be renamed (Try to click onnce more on the node).<br>(You have to handle the renaming itself in a function though, since this is implementation specific. ie: Go down in a database and change the titel of a page).<br>A good example would be to open a PHP script to do the renaming, this can for example be done by setting location.href on a hidden iframe, or by setting the src attribute on a script element.</P>');
+node1.setEditable(true);
+node1.addEditEventListener('nodeEdited');
+
+var node2 = new TreeNode(3,'subpage 2',new Array(closedGif,openGif));
+	var node2a = new TreeNode(4,'1st subpage to Node 2',new Array(closedGif,openGif));
+		var node2aa = new TreeNode(5,'subpage to subpage of Node2',new Array(closedGif,openGif));
+			var node2aaa = new TreeNode(6,'Some child',pageIcon);
+			var node2aab = new TreeNode(7,'Some child',pageIcon);
+			var node2aac = new TreeNode(8,'Some child',pageIcon);
+			node2aa.addChild(node2aaa);
+			node2aa.addChild(node2aab);
+			node2aa.addChild(node2aac);
+		node2a.addChild(node2aa);
+	var node2b = new TreeNode(9,'2nd subpage to Node 2',pageIcon);
+	var node2c = new TreeNode(10,'3rd subpageto Node 2',pageIcon);
+	node2.addChild(node2a);
+	node2.addChild(node2b);
+	node2.addChild(node2c);
+
+var node3 = new TreeNode(11,'subpage 3',new Array(closedGif,openGif));
+	var node3a = new TreeNode(12,'Yet another child',pageIcon);
+	node3.addChild(node3a);
+
+var node4 = new TreeNode(13,'subpage 4',userIcon);
+
+// rootNode.addChild(node1);
+rootNode.addChild(node2);
+rootNode.addChild(node3);
+// rootNode.addChild(node4);
+</script>
+<style type="text/css">
+div,p,a {
+	font-family: Verdana,Arial;
+	font-size: 11px;
+}
+#exampletable {
+	width: 100%;
+	height: 100%;
+}
+#examplediv {
+	width: 250px;
+	height: 100%;
+	overflow: auto;
+}
+.explanation {
+	font-weight: bold;
+	font-style: italic;
+}
+</style>
+</head>
+<body OnLoad="init();">
+<table id="exampletable">
+	<tr>
+		<td valign="top" style="width: 250px;">
+			<div id="examplediv"></div>
+		</td>
+		<td valign="top">
+			<a href="da_index.html">Danish version</a> - <a href="index.html">English version</a>
+			<div style="background-color:#EEE;border-style:dashed;border-color:#000000;border-width:1px;padding:5px;">
+				<div style="font-weight: bold;">NanoTree.</div>
+				<div id="mytext">
+				<p>NanoTree is a JavaScript tree, published under the <a href="http://www.gnu.org/copyleft/lesser.html">LGPL License</a>, which is developed to work in (at least) Internet Explorer and Mozilla<br>
+				If other browsers will be added later, this will only be a plus.<br>
+				The code is flexible, and it's easy to add to- and alter it. Also the code was made so it's easy to auto-generate with serversidescripts like PHP/JSP/ASP.</P>
+				<p>Most things in the script can be used with events, without altering the original code.<br>
+				(eg. You can tell the editor which function(s) should be called when someone expands a node, renames a node, etc.)</P>
+				<p>If you choose to use NanoTree, The original author would be veryhappy to hear about it (Send an E-Mail to: <a href="mailto:martin@nano.dk">martin@nano.dk</a>)</p>
+				<p style="font-weight:bold">Get it!</p>
+					<ul>
+						<li><a href="http://sourceforge.net/projects/nanotree/">Sourceforge project page</a></li>
+					</ul>
+				</p>
+				<p style="font-weight:bold">Word explanation</p>
+				<p>
+					<span class="explanation">NanoTree: </span>Doesn't really mean anything. It's a combination of the words nano and tree.<br>
+					<span class="explanation">Node: </span>A node is simply an item in the tree.<br>
+					<span class="explanation">Event: </span>Whenever something happens, eg. a mouseclick on a Node<br>
+				</p>
+				<p>I hope the tree will be of use, it's been fun to develop, and I hope it evolves.</p>
+				<p style="font-style:italic;">Martin Mouritzen</p>
+				</div>
+			</div>
+			<br>
+			<A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=74627&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"></A>
+		</td>
+	</tr>
+</table>
+</body></html>

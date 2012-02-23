@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<body onload="init();">
+<canvas id="canvas" width="400" height="200"></canvas>
+
+<script type="text/javascript">
+var imageReady = false;
+var img = new Image();
+img.onload = function() { prepareImage();};
+//User Variables
+img.src = '/auto.jpg';
+var canvas = document.getElementById('canvas');
+var CanvasXSize = canvas.width;
+var CanvasYSize = canvas.height;
+var INTERVAL = 30; //lower is faster
+var SCALE = 1.05;
+var x = 0;
+var y = -4.5; //vertical offset
+var clearX, clearY;
+//End User Variables
+
+// Image preparation
+var dx = 0.75;
+var imgW, imgH, clearX, clearY, x;
+
+function prepareImage() {
+  imgW = img.width * SCALE;
+  imgH = img.height * SCALE;
+  if (imgW > CanvasXSize) { // image larger than canvas
+    x = CanvasXSize-imgW; 
+  }
+  clearX = Math.max(imgW, CanvasXSize);
+  clearY = Math.max(imgH, CanvasYSize); 
+  imageReady = true;
+}
+var ctx;
+
+function init() {
+    //Get Canvas context
+    ctx = canvas.getContext('2d');
+    //Set Refresh Rate
+    return setInterval(draw, INTERVAL);
+}
+
+function draw() {
+    if (!imageReady) return;
+    //Clear Canvas
+    ctx.clearRect(0, 0, clearX, clearY);
+    //If image is <= Canvas Size
+    if (imgW <= CanvasXSize) {
+        //reset, start from beginning
+        if (x > CanvasXSize) { 
+          x = 0; 
+        }
+        //draw aditional image
+        if (x > CanvasXSize - imgW) { 
+          ctx.drawImage(img, x - CanvasXSize + 1, y, imgW, imgH);
+        }
+    } else { //If image is > Canvas Size
+        //reset, start from beginning
+        if (x > CanvasXSize) { 
+          x = CanvasXSize-imgW;
+        }
+        //draw aditional image
+        if (x > CanvasXSize-imgW) {
+          ctx.drawImage(img, x - imgW + 1, y, imgW, imgH);
+        }
+    }
+    //draw image
+    ctx.drawImage(img, x, y, imgW, imgH);
+    //amount to move
+    x += dx;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Template</title>
+</head>
+<body>
+<h1>Template</h1>
+<table>
+<tr><td>Problem: </td> <td>
+{{problemName}}
+</td>
+ </tr>
+
+<tr><td>Body: </td><td>
+{{template.body}}
+</td></tr>
+
+{% if deleted %}
+<tr><td><span style="color:red"><b>Deleted</b></span></td></tr>
+{% else %}
+<tr><td>Variables</td>
+<td>
+  <table border="1px solid black">
+    {% for variable in variables %}
+      <tr><td>{{variable.name}} </td>
+        <td>
+          {% ifequal variable.type "any" %}As per problem{% endifequal %}
+          {% ifequal variable.type "whole" %}Whole Number{% endifequal %}
+          {% ifequal variable.type "int" %}Integer{% endifequal %}
+          {% ifequal variable.type "frac" %}Fraction{% endifequal %}
+          {% ifequal variable.type "dec" %}Decimal{% endifequal %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</td></tr>
+{% endif %}
+</table>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<html>
+<head>
+<title>Calendar Popup Widget</title>
+<style type="text/css">
+  .gcal_head {
+  font-weight: bold;
+  height: 25px;
+  padding: 5px 10px 5px 5px;
+  vertical-align: middle;
+  white-space: nowrap;
+  background-color: #5B7795;
+  color: #FFFFFF;
+  font-family: verdana,arial,helvetica;
+  font-size:   7.5pt;
+}
+.gcal_pop {
+  background-color: #FFFFFF;
+  border: 2px solid;
+  padding: 3px 3px 3px 3px;
+  overflow: hidden;
+}
+.gcalp_year    {
+  height: 18px; text-align:
+  center; font-size: 7.50pt;
+  font-weight:  bold;
+  font-family: verdana,arial,helvetica;
+  font-size:   7.5pt;
+}
+.gcalp_day     {
+  text-align: center;
+  font-family: verdana,arial,helvetica;
+  font-size:   7.5pt;
+}
+.gcal_apply  {
+  cursor: pointer;
+  font-family: verdana,arial,helvetica;
+  font-size:   7.5pt;
+}
+.gcal_close      {
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.gcal_icon   {
+  cursor: pointer;
+}
+</style>
+<script>
+  monthNameAbbreviations=new Array(
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Jan</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Feb</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Mar</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Apr</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>May</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Jun</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Jul</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Aug</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Sep</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Oct</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Nov</gxp:msg>",
+  "<gxp:msg comment='3 letter abbreviation for name of Month'>Dec</gxp:msg>");
+</script>
+<script src="calpop.js"></script>
+</head>
+<body onKeyPress=CalendarPopup.close() onclick=CalendarPopup.close()>
+
+<div id="gcal_pop" style="display:none;position:absolute" class="gcal_pop">
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+   <td valign="top">
+
+   <table cellpadding="1" cellspacing="0" border="0" align="center" width="100%" id="gcalpb_yr">
+   <tr>
+      <td onclick="curCal.toggleYearMonth(-1,1);stopBubble(event);">
+      <img alt="" src="calpop/left_arrow.gif" width="6" height="11" border="0" hspace="5"
+         id="gcalpb_larrow" class="ulink"/></td>
+      <td class="gcalp_year" nowrap="nowrap" id="gcalpb_yearmonth"></td>
+      <td align="right" onclick="curCal.toggleYearMonth(1,1);stopBubble(event);">
+      <img alt="" src="calpop/right_arrow.gif" width="6" height="11" border="0" hspace="5"
+         id="gcalpb_rarrow" class="ulink"/></td>
+   </tr>
+   </table>
+
+   <table cellpadding="2" cellspacing="0" border="0" width="100%">
+   <tr id="gcalpb_dow">
+      <td class="gcalp_day"><gxp:msg comment='first letter of Sunday'>S</gxp:msg></td>
+      <td class="gcalp_day"><gxp:msg comment='first letter of Monday'>M</gxp:msg></td>
+      <td class="gcalp_day"><gxp:msg meaning='Thursday'>T</gxp:msg></td>
+      <td class="gcalp_day"><gxp:msg comment='first letter of Wednesday'>W</gxp:msg></td>
+      <td class="gcalp_day"><gxp:msg meaning='Thursday'>T</gxp:msg></td>
+
+      <td class="gcalp_day"><gxp:msg comment='first letter of Friday'>F</gxp:msg></td>
+      <td class="gcalp_day"><gxp:msg comment='first letter of Sunday'>S</gxp:msg></td>
+   </tr>
+
+   <tr id="gcalpb_week_1">
+      <td id="gcalpb_day_1" class="gcalp_day" onclick="curCal.toggleDay(1,1);"></td>
+      <td id="gcalpb_day_2" class="gcalp_day" onclick="curCal.toggleDay(2,1);"></td>
+      <td id="gcalpb_day_3" class="gcalp_day" onclick="curCal.toggleDay(3,1);"></td>
+
+      <td id="gcalpb_day_4" class="gcalp_day" onclick="curCal.toggleDay(4,1);"></td>
+      <td id="gcalpb_day_5" class="gcalp_day" onclick="curCal.toggleDay(5,1);"></td>
+      <td id="gcalpb_day_6" class="gcalp_day" onclick="curCal.toggleDay(6,1);"></td>
+      <td id="gcalpb_day_7" class="gcalp_day" onclick="curCal.toggleDay(7,1);"></td>
+   </tr>
+
+   <tr id="gcalpb_week_2">
+      <td id="gcalpb_day_8" class="gcalp_day" onclick="curCal.toggleDay(8,1);"></td>
+      <td id="gcalpb_day_9" class="gcalp_day" onclick="curCal.toggleDay(9,1);"></td>
+
+      <td id="gcalpb_day_10" class="gcalp_day" onclick="curCal.toggleDay(10,1);"></td>
+      <td id="gcalpb_day_11" class="gcalp_day" onclick="curCal.toggleDay(11,1);"></td>
+      <td id="gcalpb_day_12" class="gcalp_day" onclick="curCal.toggleDay(12,1);"></td>
+      <td id="gcalpb_day_13" class="gcalp_day" onclick="curCal.toggleDay(13,1);"></td>
+      <td id="gcalpb_day_14" class="gcalp_day" onclick="curCal.toggleDay(14,1);"></td>
+   </tr>
+
+   <tr id="gcalpb_week_3">
+      <td id="gcalpb_day_15" class="gcalp_day" onclick="curCal.toggleDay(15,1);"></td>
+
+      <td id="gcalpb_day_16" class="gcalp_day" onclick="curCal.toggleDay(16,1);"></td>
+      <td id="gcalpb_day_17" class="gcalp_day" onclick="curCal.toggleDay(17,1);"></td>
+      <td id="gcalpb_day_18" class="gcalp_day" onclick="curCal.toggleDay(18,1);"></td>
+      <td id="gcalpb_day_19" class="gcalp_day" onclick="curCal.toggleDay(19,1);"></td>
+      <td id="gcalpb_day_20" class="gcalp_day" onclick="curCal.toggleDay(20,1);"></td>
+      <td id="gcalpb_day_21" class="gcalp_day" onclick="curCal.toggleDay(21,1);"></td>
+   </tr>
+
+   <tr id="gcalpb_week_4">
+
+      <td id="gcalpb_day_22" class="gcalp_day" onclick="curCal.toggleDay(22,1);"></td>
+      <td id="gcalpb_day_23" class="gcalp_day" onclick="curCal.toggleDay(23,1);"></td>
+      <td id="gcalpb_day_24" class="gcalp_day" onclick="curCal.toggleDay(24,1);"></td>
+      <td id="gcalpb_day_25" class="gcalp_day" onclick="curCal.toggleDay(25,1);"></td>
+      <td id="gcalpb_day_26" class="gcalp_day" onclick="curCal.toggleDay(26,1);"></td>
+      <td id="gcalpb_day_27" class="gcalp_day" onclick="curCal.toggleDay(27,1);"></td>
+      <td id="gcalpb_day_28" class="gcalp_day" onclick="curCal.toggleDay(28,1);"></td>
+   </tr>
+
+   <tr id="gcalpb_week_5">
+      <td id="gcalpb_day_29" class="gcalp_day" onclick="curCal.toggleDay(29,1);"></td>
+      <td id="gcalpb_day_30" class="gcalp_day" onclick="curCal.toggleDay(30,1);"></td>
+      <td id="gcalpb_day_31" class="gcalp_day" onclick="curCal.toggleDay(31,1);"></td>
+      <td id="gcalpb_day_32" class="gcalp_day" onclick="curCal.toggleDay(32,1);"></td>
+      <td id="gcalpb_day_33" class="gcalp_day" onclick="curCal.toggleDay(33,1);"></td>
+      <td id="gcalpb_day_34" class="gcalp_day" onclick="curCal.toggleDay(34,1);"></td>
+      <td id="gcalpb_day_35" class="gcalp_day" onclick="curCal.toggleDay(35,1);"></td>
+   </tr>
+
+   </table>
+</td>
+</tr>
+<tr>
+   <td colspan="3" align="center" height="25">
+      <span onclick="CalendarPopup.close();" class="gcal_apply">Close</span>
+   </td>
+</tr>
+</table>
+</div>
+
+<form name='calForm'>
+Start <input type="text" size="10" name="date">
+<script>CalendarPopup.register(document.calForm.date);</script>
+
+<!-- ///////////////////////////////////////////////////////////////
+I put the registration here to indicate that you can dynamically add new
+CalendarPopups without having to know how many are going to be on the page in
+advance. You could just as easily register them in an body onload function.
+
+You can also change what happen when the applyDate function gets called 
+(internally) by modifying the function that, in this instance,
+'document.calForm.date.cal.applyDate' refers to -Zen 
+//////////////////////////////////////////////////////////////////// -->
+
+End <input type="text" size="10" name="date2">
+<script>CalendarPopup.register(document.calForm.date2);</script>
+Something else: <input type=text>
+</form>
+<body>
