@@ -2,6 +2,7 @@ CACHE MANIFEST
 # 7 feb 2012 v0.199
 lesson1.html
 mazaa.js
+random.js
 ATM.jpg
 auto.jpg
 cooldrink.jpg

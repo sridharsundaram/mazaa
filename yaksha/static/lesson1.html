@@ -1,13 +1,22 @@
 <html manifest="/lesson1.mf">
 <head><title>Scene 1</title>
+<script type="text/javascript" src="random.js"></script>
 <script type="text/javascript" src="mazaa.js"></script>
 </head>
 <body>
 <h4>Scene</h4>
 <script type="text/javascript">
   mazaa.associateImagesWithSounds(
-      ["ATM.jpg", "auto.jpg", "cooldrink.jpg", "doctor.jpg", "hospital.jpg", "large.jpg", "shirt.jpg", "small.jpg", "talk.jpg", "time.jpg"], 
-      ["ATM.mp3", "auto.mp3", "cooldrink.mp3", "doctor.mp3", "hospital.mp3", "large.mp3", "shirt.mp3", "small.mp3", "talk.mp3", "time.mp3"]);
+      [["ATM.jpg", "ATM.mp3"],
+       ["auto.jpg", "auto.mp3"],
+       ["cooldrink.jpg", "cooldrink.mp3"],
+       ["doctor.jpg", "doctor.mp3"],
+       ["hospital.jpg", "hospital.mp3"],
+       ["large.jpg", "large.mp3"],
+       ["shirt.jpg", "shirt.mp3"],
+       ["small.jpg", "small.mp3"],
+       ["talk.jpg", "talk.mp3"],
+       ["time.jpg", "time.mp3"]]);
 </script>
 </body>
 </html>

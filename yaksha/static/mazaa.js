@@ -2,6 +2,7 @@
 // @author Sridhar Sundaram
 
 var NUM_COLUMNS = 2;
+var NUM_ANSWER_CHOICES = 4;
 
 Mazaa = function() {
 };
@@ -37,15 +38,18 @@ function createSoundFunction(url) {
   return function() { mazaa.playAudio(url); };
 }
 
-Mazaa.prototype.associateImagesWithSounds = function(images, sounds) {
+/**
+ * 
+ * @param Array.<Array.<image,sound>> - array
+ */
+Mazaa.prototype.associateImagesWithSounds = function(array) {
   // Store association table into local storage 
   // TODO(sridhar): merge - do not overwrite
-  localStorage["__images"] = JSON.stringify(images);
-  localStorage["__sounds"] = JSON.stringify(sounds);
+  localStorage["__array"] = JSON.stringify(array);
   // Show basic scene for familiarity of user
   var table = document.createElement("table");
   table.id = "scene";
-  for (var i = 0; i < images.length; ) {
+  for (var i = 0; i < array.length; ) {
     var row = document.createElement("tr");
     table.appendChild(row);
     for (var j = 0; j < NUM_COLUMNS; j++, i++) {
@@ -53,8 +57,8 @@ Mazaa.prototype.associateImagesWithSounds = function(images, sounds) {
       row.appendChild(col);
       var img = document.createElement("img");
       img.height = img.width = 100;
-      img.src = images[i];
-      img.onclick = createSoundFunction(makeAbsoluteUrl(sounds[i]));
+      img.src = array[i][0];
+      img.onclick = createSoundFunction(makeAbsoluteUrl(array[i][1]));
       col.appendChild(img);
     }
   }
@@ -73,15 +77,9 @@ Mazaa.prototype.playGame = function() {
   if (scene) {
     scene.parentNode.removeChild(scene);
   }
-  var images = JSON.parse(localStorage["__images"]);
-  var sounds = JSON.parse(localStorage["__sounds"]);
-  var matchIndices = [];
-  while (matchIndices.length < 4) {
-    var rnd = Math.floor(Math.random() * images.length);
-    if (matchIndices.indexOf(rnd) != -1) continue;
-    matchIndices.push(rnd);
-  }
-  var answerIndex = Math.floor(Math.random() * matchIndices.length);
+  var array = JSON.parse(localStorage["__array"]);
+  
+  var answerIndex = shuffle(array, NUM_ANSWER_CHOICES);
   var testSoundIcon = document.getElementById("testSoundIcon");
   if (!testSoundIcon) {
     testSoundIcon = document.createElement('img');
@@ -90,13 +88,13 @@ Mazaa.prototype.playGame = function() {
     testSoundIcon.height = testSoundIcon.width = 50;
     document.body.appendChild(testSoundIcon);
   }
-  var testSound = sounds[matchIndices[answerIndex]];
+  var testSound = array[answerIndex][1];
   testSoundIcon.onclick = createSoundFunction(makeAbsoluteUrl(testSound));
   mazaa.playAudio(makeAbsoluteUrl(testSound));
   
   var table = document.createElement("table");
   table.id = "scene";
-  for (var i = 0; i < matchIndices.length;) {
+  for (var i = 0; i < NUM_ANSWER_CHOICES;) {
     var row = document.createElement("tr");
     table.appendChild(row);
     for (var j = 0; j < NUM_COLUMNS; j++, i++) {
@@ -104,7 +102,7 @@ Mazaa.prototype.playGame = function() {
       row.appendChild(col);
       var img = document.createElement("img");
       img.height = img.width = 100;
-      img.src = images[matchIndices[i]];
+      img.src = array[i][0];
       if (i == answerIndex) {
         img.onclick = function() {
           mazaa.playAudio(makeAbsoluteUrl('success.mp3'));
