@@ -15,15 +15,19 @@ import android.webkit.WebViewClient;
 
 public class MazaaLearnEnglishActivity extends Activity {
 
-    private MediaPlayer mMediaPlayer;
+    private static final String PRODUCTION_HOST = "yaksha-sridhar.appspot.com";
+	private static final String DEBUG_HOST = "10.0.2.2:8080";
     private static final String JAVASCRIPT_INTERFACE = "android";
+	private MediaPlayer mMediaPlayer;
 
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         setContentView(R.layout.main);
         WebView myWebView = (WebView) findViewById(R.id.webview);
-        myWebView.loadUrl("http://192.168.0.11:8080/lesson1.html");
+        String host = android.os.Debug.isDebuggerConnected() 
+        		? DEBUG_HOST : PRODUCTION_HOST;
+        myWebView.loadUrl("http://" + host + "/lesson1.html");
         WebSettings webSettings = myWebView.getSettings();
         // Local storage
         webSettings.setDomStorageEnabled(true);
