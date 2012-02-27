@@ -17,6 +17,7 @@ from handlers.quiz import Quiz
 from handlers.configure import Configure
 from handlers.template import Template
 from handlers.findtemplate import FindTemplate
+from handlers.import_spreadsheet import ImportWords
 from handlers.preferences import Preferences
 
 class Yaksha(Formdb):
@@ -43,6 +44,7 @@ def main():
                                          ('/configure', Configure),
                                          ('/template', Template),
                                          ('/findtemplate', FindTemplate),
+                                         ('/importwords', ImportWords),
                                         ],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
