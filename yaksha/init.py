@@ -5,6 +5,7 @@ from base.formdb import FormPolydb
 from datamodel.variable import Variable
 from datamodel.domain import ANY_DOMAIN
 from datamodel.syllabusunit import SyllabusUnit
+from datamodel.word import Word
 
 directProportionCategory = Category(id = 1, name = "Direct Proportion")
 
@@ -32,7 +33,7 @@ def initProblems():
   
   compositionCategory = Category(id = 6, name = "Composition of Two Problems")
   compositionCategory.registerProblem(LcmGcdProblem)
-
+ 
 def initTemplatesInDb(force = False):
   t = ProblemTemplate.all().fetch(1)
   if t and not force:
