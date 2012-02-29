@@ -19,3 +19,9 @@ from init import initSyllabusInDb
 
 initSyllabusInDb(force = True)
 print 'done'
+
+#-------------------------------------------------
+from datamodel.word import Word
+
+for word in Word.all():
+  print word.langB

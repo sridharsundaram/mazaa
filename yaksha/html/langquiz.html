@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Words</title>
+</head>
+<body>
+<div>
+  <table>
+    {% for word in words %}
+      <tr><td>{{word.langA}}</td><td>{{word.langB}}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+</body>
+</html>
