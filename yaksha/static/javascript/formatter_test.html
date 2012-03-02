@@ -1,0 +1,35 @@
+<html xmlns:xbl2="xbl2.w3c.org">
+  <head>
+    <title>Formatter</title>
+    <script>
+/**
+ * Choose matching label and return corresponding value.
+ * @return matching value for label if any, else defaultvalue
+ */
+function chooseColor(label) {
+  if (label == undefined) return 'undefined-color';
+  if (label == 'warning') return 'orange';
+  if (label == 'error') return 'red';
+  return 'green';
+}
+
+
+getBlinkFormatters().register('chooseColor', chooseColor);
+
+    </script>
+  </head>
+  <body>
+    <!-- div is not used inside xbl2:template because firefox2 does
+        not handle namespaces properly and our js testing framework
+        works only with firefox2
+    -->
+    <xbl2:template id="MainT" style="display: none;" data-bind-id="Main">
+      <span id="Main">
+        <span id='formatter'
+              class="msg {{type | chooseColor}}">
+          a message
+        </span>
+      </span>
+    </xbl2:template>
+  </body>
+</html>

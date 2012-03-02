@@ -1,0 +1,107 @@
+<html xmlns:xbl2="xbl2.w3c.org">
+  <head>
+    <title>{{mtitle}}</title>
+    <xbl2:template id="head" data-bind-id="head">hi {{msg}}</xbl2:template>
+  </head>
+  <body>
+    <!-- div is not used inside xbl2:template because firefox2 does
+        not handle namespaces properly and our js testing framework
+        works only with firefox2
+    -->
+    <h2 id="{{titleid}}">{{mtitle}}</h2>
+    <xbl2:template style="display: none;" id="MainT" template-id='MainT'>
+      <span id="Main">
+      <span id="Header">
+        <xbl2:template template-id='template-id_3'><span id="maindiv.0"><b>example</b><xbl2:span id="$id_1.0"
+           >this is the first instance</xbl2:span></span></xbl2:template><xbl2:template id='eim_template-id_3' template-id='template-id_3' num_used_instances="1" num_instances="1"></xbl2:template>
+      </span>
+      <a id="anchor" href="http://servlet#id={{id}}" id="$id_2">this is the {{caption}}</a>
+      <p> Two images will be shown here </p>
+      <xbl2:template id='imageT.0' template-id='imageT'>
+        <img id="image.0" src="http://test.jpg"/>
+      </xbl2:template><xbl2:template id='imageT.1' template-id='imageT'>
+        <img id="image.1" src="http://test.jpg"/>
+      </xbl2:template><xbl2:template id='eim_imageT' style="display: none;" 
+          template-id='imageT' num_instances=2 num_used_instances=2 
+          data-bind-id='image'></xbl2:template>
+          <span id="span">text</span>
+        <table></table>
+      </span></xbl2:template><xbl2:template id="MainT" style="display: none;" data-bind-id="Main" num_instances="1">
+      <span id="Main">
+        <span id="Header">
+          <xbl2:template style="display: none;" data-bind-id="maindiv">
+            <span id="maindiv"><b>example</b>{{text}}{{Main}}</span>
+          </xbl2:template>
+        </span>
+        <a id="anchor" href="http://servlet#id={{id}}">this is the {{caption}}</a>
+        <p> Two images will be shown here </p>
+        <xbl2:template id="imageT" style="display: none;" data-bind-id="image">
+          <img id="image" xbl2:src="{{src}}" alt="{{alt}}" xbl2:width="{{width}}">
+        </xbl2:template>
+        <span id="span">text</span>
+        <table></table>
+      </span>
+    </xbl2:template>
+      <span id="span">text</span>
+      <span id='formatter' class="">
+        a message
+      </span>
+      <table></table>
+    </span></xbl2:template>
+    <xbl2:template id="breadcrumbsT" style="display: none;" data-bind-id="/Main/list/breadcrumbs">
+      <xbl2:template id='breadcrumbs' data-expand-if="!first()">&gt;&gt;</xbl2:template>
+      {{value}}
+    </xbl2:template>
+    <ul>
+      <xbl2:template style="display: none;" id="logT.0" template-id='logT'>
+        <li id="log.0">
+          <a href="#" id="$id_3.0">Pre-existing</a>
+      </li></xbl2:template><xbl2:template id="logT" style="display: none;" data-bind-id="/Main/list/log" num_instances="1">
+        <li id="log">
+          <a href="#">{{text}}</a>
+        </li></xbl2:template></ul>
+    <!-- A table template -->
+    <table id='table' data-bind-id='table'>
+      <tr id='row' data-bind-id='row'><td id='col' data-bind-id='col'>{{cell}}</td></tr>
+    </table>
+    <select id='select' data-bind-id='select'>
+      <option id='option' data-bind-id='option'>{{choice}}</option>
+    </select>
+    <div id='singleton'><br id='br' data-bind-id='br'></div>
+    <div id='idtester'><img id='test{{id}}' data-bind-id='idtest'></div>
+    <div id="collect">
+      <img src="http://images/url1.jpg">
+      <div>
+        <img id="collectImage2" xbl2:src="http://images/url2.jpg">
+        <span>
+          <img id="collectImage3" xbl2:src="http://images/url3.jpg">
+        </span>
+        <img id="collectImage4" xbl2:src="http://images/url2.jpg">
+      </div>
+    <xbl2:template id="template_random" style="display:none;" data-bind-id="rand_template">
+      <xbl2:template id='rand_template' data-expand-if="!random()">&gt;&gt;</xbl2:template>
+      <span id="local_span">{{value}}</span>
+    </xbl2:template>
+    <xbl2:template style="display: none;" id="outer" data-bind-id="outer">
+      <strong data-bind-id="inner" id="inner"><span id="local_span">{{var}}</span></strong>
+    </xbl2:template>
+  </div>
+  <div>
+    <span id="dummy.0">dummy0
+    </span><span id="dummy.1">dummy1
+    </span><span id="dummy.2">dummy2
+    </span><span id="dummy.3">dummy3
+    </span><span id="dummy.4">dummy4
+    </span><span id="dummy.5">dummy5
+    </span><span id="dummy.6">dummy6
+    </span<span id="dummy.7">dummy7
+    </span><span id="dummy.8">dummy8
+    </span><span id="dummy.9">dummy9
+    </span><span id="dummy.10">dummy10
+    </span><span id="eim_dummy" num_instances="11" num_used_instances="5">
+    </span>
+  </div>
+  <noscript _original_script_node> var varName = 'scriptVar'; </noscript>
+  </body>
+</html>
+

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 7 feb 2012 v0.190
+# 7 feb 2012 v0.192
 lesson1.html
 mazaa.js
 random.js
