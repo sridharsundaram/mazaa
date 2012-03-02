@@ -57,8 +57,8 @@ Mazaa.prototype.associateImagesWithSounds = function(array) {
       row.appendChild(col);
       var img = document.createElement("img");
       img.height = img.width = 100;
-      img.src = array[i][0];
-      img.onclick = createSoundFunction(makeAbsoluteUrl(array[i][1]));
+      img.src = array[i][1];
+      img.onclick = createSoundFunction(makeAbsoluteUrl(array[i][0]));
       col.appendChild(img);
     }
   }
@@ -79,7 +79,7 @@ Mazaa.prototype.playGame = function() {
   }
   var array = JSON.parse(localStorage["__array"]);
   
-  var answerIndex = shuffle(array, NUM_ANSWER_CHOICES);
+  var qa = createQuestions(array, 1, NUM_ANSWER_CHOICES)[0];
   var testSoundIcon = document.getElementById("testSoundIcon");
   if (!testSoundIcon) {
     testSoundIcon = document.createElement('img');
@@ -88,7 +88,7 @@ Mazaa.prototype.playGame = function() {
     testSoundIcon.height = testSoundIcon.width = 50;
     document.body.appendChild(testSoundIcon);
   }
-  var testSound = array[answerIndex][1];
+  var testSound = qa.question;
   testSoundIcon.onclick = createSoundFunction(makeAbsoluteUrl(testSound));
   mazaa.playAudio(makeAbsoluteUrl(testSound));
   
@@ -102,8 +102,8 @@ Mazaa.prototype.playGame = function() {
       row.appendChild(col);
       var img = document.createElement("img");
       img.height = img.width = 100;
-      img.src = array[i][0];
-      if (i == answerIndex) {
+      img.src = qa.choices[i];
+      if (qa.choices[i] == qa.answer) {
         img.onclick = function() {
           mazaa.playAudio(makeAbsoluteUrl('success.mp3'));
           setTimeout(mazaa.playGame, 1000);

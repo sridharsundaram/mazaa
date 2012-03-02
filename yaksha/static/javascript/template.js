@@ -1,7 +1,7 @@
 // Copyright 2012 Mazaa Learn. All Rights Reserved.
 
 /**
- * @fileoverview Implements the Google C-templates adapted for Blink
+ * @fileoverview Implements Google C-templates adapted for Javascript
  * Binds JSON data to HTML templates in javascript.
  * An HTML element may have a data-bind-id specified.
  * This id identifies a JSON data element to bind to which may be an array or
@@ -26,7 +26,6 @@ var TEMPLATE_ID = 'template-id';
 var END_INSTANCES_MARKER = 'eim_';
 var NUM_USED_INSTANCES = 'num_used_instances';
 var NUM_INSTANCES = 'num_instances';
-var NUM_CRITICAL_INSTANCES = 'num_critical_instances';
 
 // In a data-bound collection, we want to distinguish
 // the first element from other elements. This allows us to generate things
@@ -58,32 +57,6 @@ function isTemplateInstance(element) {
   return element.getAttribute &&
              element.getAttribute(TEMPLATE_ID) != null &&
                  !isTemplate(element);
-};
-
-/**
- * Find all pushed image elements and collect in a dictionary
- * ASSUMPTION: Critical images are indicated by having xbl2:src attribute
- * @param criticalImageIds {Array.<String>} Array of critical image id's
- * @return {Object.<String,Array.<Element>>} dictionary mapping from
- *          url --> [image] for each <image xbl2:src=url>
- */
-function collectCriticalImages(criticalImageIds) {
-  criticalImagesByUrl = {};
-
-  if (!criticalImageIds) return criticalImagesByUrl;
-
-  for (var i = 0; i < criticalImageIds.length; i++) {
-    var image = getDocument().getElementById(criticalImageIds[i]);
-    var url = image.getAttribute('xbl2:src');
-    // The 'xbl2:src' attribute is no longer required, but we will keep it.
-    if (url != null) {
-      if (criticalImagesByUrl[url] == undefined) {
-        criticalImagesByUrl[url] = [];
-      }
-      criticalImagesByUrl[url].push(image);
-    }
-  }
-  return criticalImagesByUrl;
 };
 
 /**
@@ -129,11 +102,7 @@ function parseAttributes(element, attributes, parts) {
         element.id = generateNewId();
         parts.push(idOp = new IdAttributeOp(element.id));
       }
-      if ('IMG' == element.tagName && attribute.nodeName == 'xbl2:src') {
-        parts.push(new ImageOp(attribute.nodeValue, idOp));
-      } else {
-        parts.push(new AttributeOp(attribute.nodeName, attribute.nodeValue));
-      }
+      parts.push(new AttributeOp(attribute.nodeName, attribute.nodeValue));
     } else {
       appendStringToArray(parts,
           attribute.nodeName + '="' + attribute.nodeValue + '" ');
@@ -302,7 +271,6 @@ Template.prototype.instantiateWithBinding =
     } else if (part instanceof Template) {
       part.instantiate(dictionaryContext, idSuffix, parts, 0, 0);
     } else {
-      part.__proto__.count++;
       parts.push(part.instantiate(dictionaryContext, idSuffix));
     }
   }
@@ -316,10 +284,9 @@ Template.prototype.instantiateWithBinding =
  * @param dictionaryContext - stack of dictionaries to be looked up for data
  * @param idSuffix - suffix to make id's unique within template instances
  * @param dataBinding - dataBinding to be used for this template
- * @param incremental - whether binding is to be done incremental to existing.
  */
 Template.prototype.reInstantiateWithBinding =
-    function(dictionaryContext, idSuffix, dataBinding, incremental) {
+    function(dictionaryContext, idSuffix, dataBinding) {
   dataBinding[this.dataBindId] = NULL_DATA_BINDING;
   dictionaryContext.push(dataBinding);
   var element = null;
@@ -335,9 +302,8 @@ Template.prototype.reInstantiateWithBinding =
       }
     } else if (part instanceof Template) {
       // endInstancesMarker will always exist and instantiations will get linked up
-      part.instantiateAndBindData(dictionaryContext, idSuffix, incremental);
+      part.instantiateAndBindData(dictionaryContext, idSuffix);
     } else if (typeof part != 'string') {
-      part.__proto__.count++;
       part.reInstantiate(element, dictionaryContext, idSuffix);
     }
   }
@@ -403,7 +369,6 @@ Template.prototype.showOnlyUsedInstances = function(endInstancesMarker) {
       parseInt(endInstancesMarker.getAttribute(NUM_INSTANCES) || '0');
   var instance = endInstancesMarker.previousSibling;
   for (var j = numInstances; j > 0; j--) {
-    CHECK(instance.style);
     instance.style.display = j > numUsedInstances ? 'none' : '';
     instance = instance.previousSibling;
   }
@@ -415,10 +380,9 @@ Template.prototype.showOnlyUsedInstances = function(endInstancesMarker) {
  * where possible.
  * @param dictionaryContext - stack of dictionaries to be looked up for data
  * @param idSuffix - suffix to make id's unique within template instances
- * @param incremental - whether to bind new data incrementally to existing.
  */
 Template.prototype.instantiateAndBindData =
-    function(dictionaryContext, idSuffix, incremental) {
+    function(dictionaryContext, idSuffix) {
   // endInstancesMarker will always be present by construction
   var endInstancesMarker =
       getDocument().getElementById(END_INSTANCES_MARKER + this.id + idSuffix);
@@ -428,17 +392,9 @@ Template.prototype.instantiateAndBindData =
   var dataBinding =
       lookupTemplateDataBinding(dictionaryContext, this.domElement);
   if (dataBinding instanceof Array) {
-    var numUsedInstances = incremental
-        ? parseInt(endInstancesMarker.getAttribute(NUM_USED_INSTANCES) || '0')
-        : 0;
+    var numUsedInstances = 0;
     var j;
-    // TODO(manukranth) Need to figure out semantics of random(): is it
-    // numInstances 0 or critical instantiation?
-    if (numUsedInstances == 0) {
-      randomNumber = Math.floor(Math.random() * dataBinding.length);
-    } else {
-      randomNumber = -1;
-    }
+    randomNumber = Math.floor(Math.random() * dataBinding.length);
     for (j = 0;
          j < dataBinding.length && j < numInstances;
          j++) {
@@ -448,7 +404,7 @@ Template.prototype.instantiateAndBindData =
       dataBinding[j][RANDOM] = j == randomNumber;
       idSuffixWithCount = idSuffix + '.' + j;
       this.reInstantiateWithBinding(dictionaryContext,  idSuffixWithCount,
-                                  dataBinding[j], incremental);
+                                  dataBinding[j]);
     }
     numUsedInstances = j;
     if (numInstances < dataBinding.length) {
@@ -468,8 +424,7 @@ Template.prototype.instantiateAndBindData =
                                                  endInstancesMarker);
       endInstancesMarker.setAttribute(NUM_INSTANCES, '1');
     } else {
-      this.reInstantiateWithBinding(dictionaryContext, idSuffix, dataBinding,
-                                    incremental);
+      this.reInstantiateWithBinding(dictionaryContext, idSuffix, dataBinding);
     }
     endInstancesMarker.setAttribute(NUM_USED_INSTANCES, '1');
     this.showOnlyUsedInstances(endInstancesMarker);
@@ -570,97 +525,21 @@ function compileTemplates() {
 };
 
 /**
- * Merges the two jsonData structures - jsonData1 and jsonData2 into jsonData1
- * Arrays and dictionaries are recursively merged and others
- * in jsonData1 are overwritten by jsonData2.
- * Precondition: jsonData1 and jsonData2 have the same schema except
- * when one of them is null. We iterate over jsonData2 and merge only if
- * jsonData2 is non null
- * @param jsonData1 - jsonData
- * @param jsonData2 - jsonData
- * @return value - merged value of jsonData1 and jsonData2
- */
-function mergeJsonData(jsonData1, jsonData2) {
-  if (!jsonData2) return jsonData1;
-  if (!jsonData1) {
-    return jsonData2;
-  }
-
-  if (jsonData2 instanceof Array) {
-    for (var s = 0; s < jsonData2.length; s++) {
-      jsonData1[s] = mergeJsonData(jsonData1[s], jsonData2[s]);
-    }
-    return jsonData1;
-  }
-
-  if (jsonData2 instanceof Object) {
-    for (s in jsonData2) {
-      if (!jsonData2.hasOwnProperty(s)) continue;
-      jsonData1[s] = mergeJsonData(jsonData1[s], jsonData2[s]);
-    }
-    return jsonData1;
-  }
-
-  // jsonData2 not null, array or object - jsonData2 overwrites jsonData1
-  return jsonData2;
-}
-
-/**
  * Prepare for template instantiation - compile the templates
  * and bind the critical data passed in.
  * @param jsonData {jsonData} - critical data to be bound.
  */
 function TemplateManager(jsonData) {
   compileTemplates();
-  this.applyTemplate(jsonData, false, {});
 };
 
 /**
  * @param jsonData - data from server which specifies template dataBindings
- * @param incremental {bool} whether to preserver previous template applications
  * to be applied to the HTML body of the document
  */
-TemplateManager.prototype.applyTemplate =
-    function(jsonData, incremental, templateOps) {
+TemplateManager.prototype.applyTemplate = function(jsonData) {
   var dictionaryContext = [];
-  ShadowTemplates.criticalImageIds = [];
-  ShadowTemplates.isCriticalMode = !incremental;
-  // In incremental mode, we want to preserve earlier data + instantiation
-  // but do not want to process criticalImages
-  if (incremental) {
-    mergeJsonData(ShadowTemplates.jsonData, jsonData);
-  } else {
-    AttributeOp.prototype.count = 0;
-    ValueOp.prototype.count = 0;
-    ImageOp.prototype.count = 0;
-    ShadowTemplates.jsonData = jsonData;
-  }
-  ShadowTemplates.ROOT.reInstantiateWithBinding(dictionaryContext, '',
-      ShadowTemplates.jsonData, incremental);
-  templateOps.attributeOps = AttributeOp.prototype.count;
-  templateOps.contentOps = ValueOp.prototype.count;
-  templateOps.imageOps = ImageOp.prototype.count;
-  return collectCriticalImages(ShadowTemplates.criticalImageIds);
-};
-
-/**
- * Apply the patchData to the document and return unpatchData.
- * @param patchData - {Array.<Array.<String, String, String>>}
- * @return unpatchData in the same format as patchData such that
- *         applying patch with unpatchData reverses the changes.
- */
-TemplateManager.prototype.applyPatch = function(patchData) {
-  var unpatchData = [];
-  for (var i = 0; i < patchData.length; i++) {
-    var patch = patchData[i];
-    var path = patch[0];
-    if (path.lastIndexOf('@') != -1) {
-      unpatchData.push(patchAttribute(patch));
-    } else {  // This is a node
-      unpatchData.push(patchNode(patch));
-    }
-  }
-  return unpatchData.reverse();
+  ShadowTemplates.ROOT.reInstantiateWithBinding(dictionaryContext, '', jsonData);
 };
 
 /**
@@ -685,37 +564,4 @@ function removeTemplateInstances() {
     endInstancesMarker.setAttribute(NUM_INSTANCES, 0);
     endInstancesMarker.setAttribute(NUM_USED_INSTANCES, 0);
   }
-}
-
-/**
- * Execute all the scripts for the current page.
- * Note, this is not clearing the javascript context of the previous page
- */
-function executeScripts() {
-  // By Default all the scripts are converted to noscript in template.
-  var noScriptNodes = getDocument().getElementsByTagName('noscript');
-  scriptDiv = getDocument().createElement('div');
-  scriptDiv.id = 'scriptDiv_blink';
-
-  for (var i = 0 ; i < noScriptNodes.length; i++) {
-    var noScript = noScriptNodes[i];
-    if (noScript.hasAttribute(ORIGINAL_SCRIPT_NODE)) {
-      var scriptNode = getDocument().createElement('script');
-
-      for (var j = 0; j < noScript.attributes.length; j++) {
-        var attribute = noScript.attributes[j];
-        scriptNode.setAttribute(attribute.nodeName, attribute.value);
-      }
-
-      scriptNode.text = noScript.textContent;
-      scriptDiv.appendChild(scriptNode);
-    }
-  }
-  getDocument().body.appendChild(scriptDiv);
-}
-
-function clearScriptNodes() {
-  var scriptDiv = getDocument().getElementById('scriptDiv_blink');
-  if (scriptDiv)
-    scriptDiv.parentNode.removeChild(scriptDiv);
 }

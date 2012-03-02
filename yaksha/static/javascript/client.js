@@ -98,26 +98,6 @@ var COMPLETED = 'c';
 // The start state is this one where the XHR will be dispatched.
 var pageLoadState = DATA_REFRESH_START;
 
-
-function requestRefresh(url) {
-  if (xhReq.getUrl() == url) {
-    console.log('refreshing');
-    refresh();
-    return;
-  }
-  xhReq.abort();
-  // TODO(ssundaram): Handle URL better than as part of csiTimings here.
-  xhReq.setUrl(url);
-  changePageLoadState(DATA_REFRESH_START);
-  changePageLoadState(WAITING_FOR_DATA);
-
-  console.log('Sending GET request for ' + url);
-  xhReq.open('GET', url, true);
-  xhReq.send(null);
-
-  prepareTemplates();
-}
-
 // //////////////////////////////////////////////////////////////////////////
 // Cookie handling methods
 // //////////////////////////////////////////////////////////////////////////
@@ -158,8 +138,23 @@ function setWindowLocation(url, hashFragment) {
 
 function changePageLoadState(newState) {
   pageLoadState = newState;
-  var timeNow = new Date();
-  var timeTaken = (timeNow - timeStart);
+}
+
+function requestRefresh(url) {
+  if (xhReq.getUrl() == url) {
+    console.log('refreshing');
+    refresh();
+    return;
+  }
+  xhReq.abort();
+  // TODO(ssundaram): Handle URL better than as part of csiTimings here.
+  xhReq.setUrl(url);
+  changePageLoadState(DATA_REFRESH_START);
+  changePageLoadState(WAITING_FOR_DATA);
+
+  console.log('Sending GET request for ' + url);
+  xhReq.open('GET', url, true);
+  xhReq.send(null);
 }
 
 function refresh() {
@@ -170,13 +165,8 @@ function refresh() {
   // Improper status.
   if (xhReq.getStatus() != 200) return;
 
-  if (pageLoadState == WAITING_FOR_DATA) {
-    var serverTimeMs = Math.round(xhReq.getResponseHeader('X-Server-Time'));
-  }
-
-  console.log('Loading data');
   changePageLoadState(DATA_RECEIVED);
-  instantiatePage(xhReq.getResponseText(), false);
+  instantiatePage(xhReq.getResponseText());
   changePageLoadState(DATA_LOADED);
 }
 
@@ -184,37 +174,16 @@ function refresh() {
 // Other methods
 // //////////////////////////////////////////////////////////////////////////
 
-// window.location.{protocol, host, pathname, hash}
-window.onhashchange = requestContextData;
-
-function requestContextData() {
-  timeStart = new Date();
-  var locationServletPath = ('' + window.location.pathname);
-  var dataQuery = window.location.hash.substring(1);
-
-  if (dataQuery == '') return; // Nothing to do.
-
-  var dataUrl;
-  dataUrl = locationServletPath + '?' + dataQuery;
-  if (lastDataUrl == dataUrl) {
-    return;
-  }
-  lastDataUrl = dataUrl;
-  window.top.location.hash = dataQuery;
-  requestRefresh(window.top.location.protocol + '/' + host + dataUrl);
-}
-
-function doHipRefresh(hashUrl) {
+function doQuizRefresh() {
   getNestedTemplates();
-  if (hashUrl != '') {
-    window.top.location.hash = hashUrl;
-  }
-  requestContextData();
+  requestRefresh(window.location.protocol + '//' + window.location.host + '/vocabulary');
 }
 
 // //////////////////////////////////////////////////////////////////////////
 // Template related methods
 // //////////////////////////////////////////////////////////////////////////
+
+var templateManager = new TemplateManager();
 
 /**
  * Instantiate the templates in the HTML page.
@@ -222,13 +191,15 @@ function doHipRefresh(hashUrl) {
  * @param incremental {boolean} - whether instantiation is incremental
  * @return dictionary of pushed image elements from the template
  */
-function instantiatePage(jsonDataStr, incremental) {
+function instantiatePage(jsonDataStr) {
   if (jsonDataStr == '') {
     return;
   }
   var jsonData = (typeof JSON != 'undefined' && JSON.parse)
       ? JSON.parse(jsonDataStr) : eval('(' + jsonDataStr + ')');
-  return applyTemplate(jsonData, incremental);
+  var words = jsonData['words'];
+  shuffle(words, 10);
+  templateManager.applyTemplate(jsonData);
 }
 
 function createClosure(fn, xhReq, arg) {

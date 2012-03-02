@@ -18,7 +18,7 @@ from handlers.template import Template
 from handlers.findtemplate import FindTemplate
 from handlers.import_spreadsheet import ImportWords
 from handlers.preferences import Preferences
-from handlers.langquiz import LangQuiz
+from handlers.vocabulary import Vocabulary
 
 class Yaksha(Formdb):
   id_field = 'app_num'
@@ -45,7 +45,7 @@ def main():
                                          ('/template', Template),
                                          ('/findtemplate', FindTemplate),
                                          ('/importwords', ImportWords),
-                                         ('/langquiz', LangQuiz)
+                                         ('/vocabulary', Vocabulary)
                                         ],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
