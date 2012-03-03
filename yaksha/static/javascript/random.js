@@ -30,7 +30,7 @@ function shuffle(array) {
  * @param {Integer} ansIndex - index of answer
  * @return array of choice indices (no duplicates)
  */
-function chooseChoices(low, high, numChoices, ansIndex) {
+function createChoices(low, high, numChoices, ansIndex) {
   var choiceIndices = [ansIndex];
   while (choiceIndices.length < numChoices) {
     var rnd = low + Math.floor(Math.random() * (high - low + 1));
@@ -42,6 +42,9 @@ function chooseChoices(low, high, numChoices, ansIndex) {
   return choiceIndices;
 }
 
+function QuestionAnswer() {
+}
+
 /**
  * Randomly creates numQuestions multiple-choice questions.
  * Given an array of [question, answer] pairs, outputs questions each with 
@@ -51,39 +54,36 @@ function chooseChoices(low, high, numChoices, ansIndex) {
  * @param {Integer} numAnswerChoices - number of answer choices per question
  * @return {Array.<Object.<question, answer, Array.<choices>>} list of qa  
  */
-var QUESTION = 0;
-var ANSWER = 1;
-
-function QA(tquestion, tanswer, tchoices) {
-  this.question = tquestion;
-  this.answer = tanswer;
-  this.choices = tchoices;
+QuestionAnswer.prototype.create = function(id, question, answer, opt_choices) {
+  return { id: id, question: question, answer: answer, choices: opt_choices};
 }
 
-QA.prototype.compare = function(that) {
+QuestionAnswer.prototype.compare = function(that) {
   return this.question == that.question &&
          this.answer == that.answer &&
          Array.equals(this.choices, that.choices);
 }
 
+var QA = new QuestionAnswer();
+
 function createQuestions(qaArray, numQuestions, numAnswerChoices) {
   var qaList = [];
   for (var i = 0; i < numQuestions; i++) {
     // Choose the question-answer pair
-    var qaIndex = i + Math.floor(Math.random() * qaArray.length);
+    var qaIndex = i + Math.floor(Math.random() * (qaArray.length - i));
     // Generate choices - for now, we choose randomly
-    var ansChoices = chooseChoices(0, qaArray.length - 1, numAnswerChoices,
+    var ansChoices = createChoices(0, qaArray.length - 1, numAnswerChoices,
                                    qaIndex);
     // Set up the choices
     var choices = [];
     for (var j = 0; j < numAnswerChoices; j++) {
-      choices.push(qaArray[ansChoices[j]][ANSWER]);
+      var choice = qaArray[ansChoices[j]].answer;
+      choices.push({ choice: choice, 
+                     correct: choice == qaArray[qaIndex].answer });
     }
     shuffle(choices);
-    var question = qaArray[qaIndex][QUESTION]; 
-    var answer = qaArray[qaIndex][ANSWER];
-    var qa = new QA(question, answer, choices);
-    qaList.push(qa);
+    qaArray[qaIndex].choices = choices; 
+    qaList.push(qaArray[qaIndex]);
     // Ensure this question-answer pair will not be used for another question.
     swapArrayItems(qaArray, i, qaIndex);
   }

@@ -102,7 +102,11 @@ function parseAttributes(element, attributes, parts) {
         element.id = generateNewId();
         parts.push(idOp = new IdAttributeOp(element.id));
       }
-      parts.push(new AttributeOp(attribute.nodeName, attribute.nodeValue));
+      if ('IMG' == element.tagName && attribute.nodeName == 'xbl2:src') {
+        parts.push(new ImageOp(attribute.nodeValue, idOp));
+      } else {
+        parts.push(new AttributeOp(attribute.nodeName, attribute.nodeValue));
+      }
     } else {
       appendStringToArray(parts,
           attribute.nodeName + '="' + attribute.nodeValue + '" ');
@@ -534,12 +538,60 @@ function TemplateManager(jsonData) {
 };
 
 /**
+ * Find all image elements and collect in a dictionary
+ * ASSUMPTION: Critical images are indicated by having xbl2:src attribute
+ * @param criticalImageIds {Array.<String>} Array of critical image id's
+ * @return {Object.<String,Array.<Element>>} dictionary mapping from
+ *          url --> [image] for each <image xbl2:src=url>
+ */
+function collectCriticalImages(criticalImageIds) {
+  criticalImagesByUrl = {};
+
+  if (!criticalImageIds) return criticalImagesByUrl;
+
+  for (var i = 0; i < criticalImageIds.length; i++) {
+    var image = getDocument().getElementById(criticalImageIds[i]);
+    var url = image.getAttribute('xbl2:src');
+    // The 'xbl2:src' attribute is no longer required, but we will keep it.
+    if (url != null) {
+      if (criticalImagesByUrl[url] == undefined) {
+        criticalImagesByUrl[url] = [];
+      }
+      criticalImagesByUrl[url].push(image);
+    }
+  }
+  return criticalImagesByUrl;
+};
+
+/**
+ * Transfer xbl2:src to src for images.
+ * @param pushedContentString {String} string corresponding to pushed content
+ * @param criticalImages {Object.<string,Array.<Element>>} map from criticalUrl to image elements array.
+ */
+function inlinePushedImages(criticalImages) {
+  for (var url in criticalImages) {
+    if (criticalImages.hasOwnProperty(url)) {
+      var imageArray = criticalImages[url];
+      var src = url;
+      for (var i = 0; i < imageArray.length; i++) {
+        var image = imageArray[i];
+        image.src = src;
+      }
+      console.log('Processed ' + url);
+    }
+  }
+}
+
+/**
  * @param jsonData - data from server which specifies template dataBindings
  * to be applied to the HTML body of the document
  */
 TemplateManager.prototype.applyTemplate = function(jsonData) {
   var dictionaryContext = [];
+  ShadowTemplates.criticalImageIds = [];
+  this.jsonData = jsonData;
   ShadowTemplates.ROOT.reInstantiateWithBinding(dictionaryContext, '', jsonData);
+  inlinePushedImages(collectCriticalImages(ShadowTemplates.criticalImageIds));
 };
 
 /**

@@ -1,0 +1,27 @@
+div.album {
+  margin: 2px;
+  height: auto;
+  width: 250px;
+  float: left;
+  text-align: center;
+}
+div.img {
+  margin:2px;
+  height:auto;
+  width:auto;
+  float:left;
+  text-align:center;
+}
+div.img img {
+  display:inline;
+  margin:3px;
+  border:1px solid #ffffff;
+}
+
+div.qa {
+  margin:10px;
+  height:auto;
+  width:250;
+  float:left;
+  text-align:left;
+}

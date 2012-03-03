@@ -16,9 +16,9 @@ function testShuffle() {
   assertEquals([3, 1, 4, 2] + '', a + '');
 }
 
-function testChooseChoices() {
+function testCreateChoices() {
   var a = [1, 2, 3, 4];
-  var choiceIndices = chooseChoices(0, 3, 4, 2);
+  var choiceIndices = createChoices(0, 3, 4, 2);
   assertEquals(4, choiceIndices.length);
 }
 
@@ -27,22 +27,22 @@ function ArrayEquals(a, b) {
 }
 
 function testCreateQuestions() {
-  var a = [['a','A'], ['b', 'B'], ['c', 'C'], ['d', 'D'], 
-           ['e', 'E'], ['f', 'F'], ['g', 'G']];
+  var a = [QA.create('a','A'), QA.create('b', 'B'), QA.create('c', 'C'), 
+           QA.create('d', 'D'), QA.create('e', 'E'), QA.create('f', 'F')];
   i = 4;
   var saveRandom = Math.random;
-  var saveChooseChoices = chooseChoices;
+  var saveCreateChoices = createChoices;
   var saveShuffle = shuffle;
   shuffle = function(a) { };
-  chooseChoices = function() { return [4,3,2,1];};
+  createChoices = function() { return [4,3,2,1];};
   Math.random = function() { return 0.5; }
   var questions = createQuestions(a, 2, 4);
   Math.random = saveRandom;
-  chooseChoices = saveChooseChoices;
+  createChoices = saveCreateChoices;
   shuffle = saveShuffle;
   
-  assertTrue(ArrayEquals([new QA('d', 'D', ['D', 'C', 'B', 'A']), 
-                          new QA('b', 'A', ['A', 'B', 'C', 'D'])], 
+  assertTrue(ArrayEquals([QA.create('d', 'D', ['D', 'C', 'B', 'A']), 
+                          QA.create('b', 'A', ['A', 'B', 'C', 'D'])], 
                          questions));
 }
 </script>

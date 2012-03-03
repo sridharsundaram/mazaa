@@ -6,6 +6,7 @@ api_version: 1
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
+  mime_type: text/css
   
 - url: /(.*\.html)
   static_files: static/\1

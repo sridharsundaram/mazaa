@@ -111,7 +111,6 @@ AttributeOp.prototype.instantiate = function(dictionaryContext, idSuffix) {
  */
 AttributeOp.prototype.reInstantiate =
     function(element, dictionaryContext, idSuffix) {
-  CHECK(element);
   var value = this.valueOp.instantiate(dictionaryContext, idSuffix);
   if (this.xbl2 && !value) {
     element.removeAttribute(this.name);

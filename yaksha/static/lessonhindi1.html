@@ -7,14 +7,41 @@
     <script type="text/javascript" src="util.js"></script>
     <script type="text/javascript" src="template.js"></script>
     <script type="text/javascript" src="template_ops.js"></script>
+    <script>
+      function evalAnswers() {
+        jsonData = templateManager.jsonData;
+        var wordList = jsonData['wordList'];
+        var correct = 0;
+        for (var i = 0; i < wordList.length; i++) {
+          var radioboxes = document.forms[0]['id' + wordList[i].id];
+          for (var j = 0; j < radioboxes.length; j++) {
+            if (radioboxes[j].checked) {
+              correct += radioboxes.value == radioboxes.answer;
+            }
+          }
+        }
+        var score = document.getElementById('score');
+        score.innerHTML = '' + (correct * 10);
+        jsonData['wordList'] = createQuestions(jsonData['words'], 5, NUM_ANSWER_CHOICES);
+        templateManager.applyTemplate(jsonData);
+      }
+    </script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/mazaa.css">
   </head>
   <body onload="doQuizRefresh('langA=hindi&langB=english')">
     <h4>Scene</h4>
-    <table>
-      <tr data-bind-id="words">
-        <td>{{langA}}</td><td>{{langB}}</td>
-      </tr>
-    </table>
+    <div>Score: <span id='score'></span></div>
+    <form onsubmit="evalAnswers(); return false;">
+    <div class="album">
+      <div data-bind-id="wordList" class="qa">
+        <div>{{question}}</div>
+        <div data-bind-id="choices">
+          <input type="radio" name="id{{id}}" value="{{choice}}" answer="{{answer}}">{{choice}}
+        </div>
+      </div>
+      <input type="button" value="Next" onclick="evalAnswers()")>
+    </div>
+    </form>
     <script type="text/javascript" src="client.js"></script>
   </body>
 </html>

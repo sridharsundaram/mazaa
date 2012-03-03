@@ -1,8 +1,12 @@
 CACHE MANIFEST
-# 7 feb 2012 v0.190
+# 7 feb 2012 v0.195
 lesson1.html
 mazaa.js
 random.js
+template.js
+lookup.js
+util.js
+template_ops.js
 ATM.jpg
 auto.jpg
 cooldrink.jpg
@@ -26,3 +30,5 @@ time.mp3
 sound_icon.jpg
 success.mp3
 failure.mp3
+stylesheets/mazaa.css
+game1.html

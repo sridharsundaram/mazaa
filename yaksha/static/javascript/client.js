@@ -83,10 +83,6 @@ function createXMLHttpRequest() {
 
 var xhReq = createXMLHttpRequest();
 
-// //////////////////////////////////////////////////////////////////////////
-// Critical Data, Images, NonCritical load methods
-// //////////////////////////////////////////////////////////////////////////
-
 // TODO(ssundaram): Add prs, cprc, prc events to CSI dashboard
 var DATA_REFRESH_START = 'prs';
 var WAITING_FOR_DATA = 'wfd';
@@ -197,8 +193,7 @@ function instantiatePage(jsonDataStr) {
   }
   var jsonData = (typeof JSON != 'undefined' && JSON.parse)
       ? JSON.parse(jsonDataStr) : eval('(' + jsonDataStr + ')');
-  var words = jsonData['words'];
-  shuffle(words, 10);
+  jsonData['wordList'] = createQuestions(jsonData['words'], 5, NUM_ANSWER_CHOICES);
   templateManager.applyTemplate(jsonData);
 }
 

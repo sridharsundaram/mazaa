@@ -42,14 +42,14 @@ function createSoundFunction(url) {
  * 
  * @param Array.<Array.<image,sound>> - array
  */
-Mazaa.prototype.associateImagesWithSounds = function(array) {
+Mazaa.prototype.associateImagesWithSounds = function(qaList) {
   // Store association table into local storage 
   // TODO(sridhar): merge - do not overwrite
-  localStorage["__array"] = JSON.stringify(array);
+  localStorage["__qaList"] = JSON.stringify(qaList);
   // Show basic scene for familiarity of user
   var table = document.createElement("table");
   table.id = "scene";
-  for (var i = 0; i < array.length; ) {
+  for (var i = 0; i < qaList.length; ) {
     var row = document.createElement("tr");
     table.appendChild(row);
     for (var j = 0; j < NUM_COLUMNS; j++, i++) {
@@ -57,8 +57,8 @@ Mazaa.prototype.associateImagesWithSounds = function(array) {
       row.appendChild(col);
       var img = document.createElement("img");
       img.height = img.width = 100;
-      img.src = array[i][1];
-      img.onclick = createSoundFunction(makeAbsoluteUrl(array[i][0]));
+      img.src = qaList[i].answer;
+      img.onclick = createSoundFunction(makeAbsoluteUrl(qaList[i].question));
       col.appendChild(img);
     }
   }
@@ -77,9 +77,9 @@ Mazaa.prototype.playGame = function() {
   if (scene) {
     scene.parentNode.removeChild(scene);
   }
-  var array = JSON.parse(localStorage["__array"]);
+  var qaList = JSON.parse(localStorage["__qaList"]);
   
-  var qa = createQuestions(array, 1, NUM_ANSWER_CHOICES)[0];
+  var qa = createQuestions(qaList, 1, NUM_ANSWER_CHOICES)[0];
   var testSoundIcon = document.getElementById("testSoundIcon");
   if (!testSoundIcon) {
     testSoundIcon = document.createElement('img');
@@ -102,8 +102,8 @@ Mazaa.prototype.playGame = function() {
       row.appendChild(col);
       var img = document.createElement("img");
       img.height = img.width = 100;
-      img.src = qa.choices[i];
-      if (qa.choices[i] == qa.answer) {
+      img.src = qa.choices[i].choice;
+      if (qa.choices[i].choice == qa.answer) {
         img.onclick = function() {
           mazaa.playAudio(makeAbsoluteUrl('success.mp3'));
           setTimeout(mazaa.playGame, 1000);
