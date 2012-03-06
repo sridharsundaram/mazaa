@@ -25,3 +25,12 @@ div.qa {
   float:left;
   text-align:left;
 }
+
+.success {
+	color: green;
+	font-weight: bold;
+}
+
+.failure {
+	color: red;
+}

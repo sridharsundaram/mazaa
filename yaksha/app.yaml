@@ -11,6 +11,7 @@ handlers:
 - url: /(.*\.html)
   static_files: static/\1
   upload: static/(.*\.html)
+  mime_type: text/html
 
 - url: /javascript
   static_dir: javascript
@@ -36,6 +37,6 @@ handlers:
 
 - url: /.*
   script: handlers/main.py
-  login: required
+#  login: required
 
 

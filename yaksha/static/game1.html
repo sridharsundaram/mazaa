@@ -9,16 +9,16 @@
     <script type="text/javascript" src="javascript/template_ops.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/mazaa.css">
     <script type="text/javascript">
-      function showSuccess() {
-        mazaa.playAudio(makeAbsoluteUrl('success.mp3'));
-        setTimeout(function() { window.location = 'game1.html';}, 1000);
-      }
-  
-      function showFailure() {
-        mazaa.playAudio(makeAbsoluteUrl('failure.mp3'));
+      function showResult(success) {
+        if (success) {
+          mazaa.playAudio(makeAbsoluteUrl('success.mp3'));
+          setTimeout(function() { window.location = 'game1.html';}, 1000);
+        } else { // failure
+          mazaa.playAudio(makeAbsoluteUrl('failure.mp3'));
+        }
       }
       
-      function prepareGame(jsonData) {  
+      function prepareGame(jsonData) {
         jsonData['sound'] = createQuestions(jsonData['allsounds'], 1, NUM_ANSWER_CHOICES);
         templateManager.applyTemplate(jsonData);
         mazaa.playAudio(makeAbsoluteUrl(jsonData['sound'][0].question));
@@ -27,18 +27,17 @@
   </head>
   <body onload="fetchAndBindData('/lesson1.data', prepareGame)">
     <h4>Game</h4>
+      <input type="button" value="New game" onclick="fetchAndBindData('/lesson1.data', prepareGame);">
+      <input type="button" value="Back to Lesson" onclick="window.location='lesson1.html';">
       <div id="scene1" class="album" data-bind-id="sound">
         <div>
           <img src='sound_icon.jpg' id="testSoundIcon" height="50" width="50" 
                onclick="mazaa.playAudio(makeAbsoluteUrl('{{question}}'))">
         </div>
         <div class="img" data-bind-id="choices">
-          <img width=100 height=100 xbl2:src="{{choice}}" data-expand-if="correct" onclick="showSuccess();">
-          <img width=100 height=100 xbl2:src="{{choice}}" data-expand-if="!correct" onclick="showFailure();">
+          <img width=100 height=100 xbl2:src="{{choice}}" onclick="showResult({{correct}});">
         </div>
       </div>
-      <input type="button" value="New game" onclick="window.location='game1.html';">
-      <input type="button" value="Lesson" onclick="window.location='lesson1.html';">
 
       <script type="text/javascript" src="javascript/client.js"></script>
 </body>

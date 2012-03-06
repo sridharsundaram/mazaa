@@ -1,15 +1,10 @@
-from base.form_handler import FormHandler
-from datamodel.word import Word
-from google.appengine.api import users
-from datamodel.usr import User
 from google.appengine.ext import webapp
 import simplejson
 
 class Lesson1Data(webapp.RequestHandler):
+  authorize = False
+  
   def get(self):
-    current_user = users.get_current_user()
-    user = User.retrieve(User, current_user.nickname())
-#    session = sessions.Session(writer = "cookie")
     self.jsonData = {'allsounds' : [ 
                        {'id': '1', 'question': "ATM.mp3", 'answer': "ATM.jpg"},
                        {'id': '2', 'question': "auto.mp3", 'answer': "auto.jpg"},

@@ -6,7 +6,7 @@
 <key>GOOGLE_APP_ENGINE</key>
 <value>C:\Program Files\Google\google_appengine</value>
 <key>SYMPY</key>
-<value>c:\Python25\Lib\site-packages\sympy</value>
+<value>C:\Python25\Lib\site-packages\sympy-0.7.1-py2.5-win32.egg\sympy</value>
 </pydev_variables_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/yaksha</path>
