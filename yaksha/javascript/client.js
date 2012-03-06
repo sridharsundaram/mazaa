@@ -162,7 +162,7 @@ function refresh() {
   if (xhReq.getStatus() != 200) return;
 
   changePageLoadState(DATA_RECEIVED);
-  instantiatePage(xhReq.getResponseText());
+  loadPageData(xhReq.getResponseText());
   changePageLoadState(DATA_LOADED);
 }
 
@@ -170,9 +170,11 @@ function refresh() {
 // Other methods
 // //////////////////////////////////////////////////////////////////////////
 
-function doQuizRefresh() {
+function fetchAndBindData(relativeUrl, loadDataCallback) {
   getNestedTemplates();
-  requestRefresh(window.location.protocol + '//' + window.location.host + '/vocabulary');
+  xhReq.loadDataCallback = loadDataCallback;
+  requestRefresh(window.location.protocol + '//' + window.location.host + 
+                 relativeUrl);
 }
 
 // //////////////////////////////////////////////////////////////////////////
@@ -187,14 +189,13 @@ var templateManager = new TemplateManager();
  * @param incremental {boolean} - whether instantiation is incremental
  * @return dictionary of pushed image elements from the template
  */
-function instantiatePage(jsonDataStr) {
+function loadPageData(jsonDataStr) {
   if (jsonDataStr == '') {
     return;
   }
   var jsonData = (typeof JSON != 'undefined' && JSON.parse)
       ? JSON.parse(jsonDataStr) : eval('(' + jsonDataStr + ')');
-  jsonData['wordList'] = createQuestions(jsonData['words'], 5, NUM_ANSWER_CHOICES);
-  templateManager.applyTemplate(jsonData);
+  xhReq.loadDataCallback(jsonData);
 }
 
 function createClosure(fn, xhReq, arg) {

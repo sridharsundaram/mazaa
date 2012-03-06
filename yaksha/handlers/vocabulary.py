@@ -10,8 +10,8 @@ class Vocabulary(webapp.RequestHandler):
     current_user = users.get_current_user()
     user = User.retrieve(User, current_user.nickname())
 #    session = sessions.Session(writer = "cookie")
-    self.words = Word.all().fetch(1000)
-    self.words = { "words":  [ {'id': word.key().id(), 'question': word.langA, 
+    self.jsonData = Word.all().fetch(1000)
+    self.jsonData = { "words":  [ {'id': word.key().id(), 'question': word.langA, 
                                 'answer': word.langB } for word in self.words]};
     self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(simplejson.dumps(self.words))
+    self.response.out.write(simplejson.dumps(self.jsonData))

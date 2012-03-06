@@ -19,6 +19,7 @@ from handlers.findtemplate import FindTemplate
 from handlers.import_spreadsheet import ImportWords
 from handlers.preferences import Preferences
 from handlers.vocabulary import Vocabulary
+from handlers.lesson1data import Lesson1Data
 
 class Yaksha(Formdb):
   id_field = 'app_num'
@@ -45,7 +46,8 @@ def main():
                                          ('/template', Template),
                                          ('/findtemplate', FindTemplate),
                                          ('/importwords', ImportWords),
-                                         ('/vocabulary', Vocabulary)
+                                         ('/vocabulary', Vocabulary),
+                                         ('/lesson1.data', Lesson1Data),
                                         ],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)

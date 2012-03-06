@@ -1,12 +1,14 @@
 CACHE MANIFEST
-# 7 feb 2012 v0.195
+# 7 feb 2012 v0.198
 lesson1.html
-mazaa.js
-random.js
-template.js
-lookup.js
-util.js
-template_ops.js
+lesson1.data
+javascript/mazaa.js
+javascript/random.js
+javascript/template.js
+javascript/lookup.js
+javascript/util.js
+javascript/template_ops.js
+javascript/client.js
 ATM.jpg
 auto.jpg
 cooldrink.jpg

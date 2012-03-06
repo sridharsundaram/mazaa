@@ -12,9 +12,9 @@ handlers:
   static_files: static/\1
   upload: static/(.*\.html)
 
-- url: /(.*\.js)
-  static_files: static/javascript/\1
-  upload: static/javascript/(.*\.js)
+- url: /javascript
+  static_dir: javascript
+  mime_type: text/javascript
 
 - url: /(.*\.gif)
   static_files: static/images/\1

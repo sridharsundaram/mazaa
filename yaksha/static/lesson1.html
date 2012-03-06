@@ -1,15 +1,20 @@
 <html manifest="/lesson1.mf">
   <head>
     <title>Scene 1</title>
-    <script type="text/javascript" src="random.js"></script>
-    <script type="text/javascript" src="mazaa.js"></script>
-    <script type="text/javascript" src="lookup.js"></script>
-    <script type="text/javascript" src="util.js"></script>
-    <script type="text/javascript" src="template.js"></script>
-    <script type="text/javascript" src="template_ops.js"></script>
+    <script type="text/javascript" src="javascript/random.js"></script>
+    <script type="text/javascript" src="javascript/mazaa.js"></script>
+    <script type="text/javascript" src="javascript/lookup.js"></script>
+    <script type="text/javascript" src="javascript/util.js"></script>
+    <script type="text/javascript" src="javascript/template.js"></script>
+    <script type="text/javascript" src="javascript/template_ops.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/mazaa.css">
+  <script type="text/javascript">
+    function prepareLesson(jsonData) {  
+      templateManager.applyTemplate(jsonData);
+    }
+  </script>
   </head>
-  <body>
+  <body onload="fetchAndBindData('/lesson1.data', prepareLesson)">
     <h4>Scene</h4>
   <div id="scene" class="album">
     <div data-bind-id="allsounds" class="img">
@@ -19,22 +24,6 @@
   
   <input type="button" value="Play game" onclick="window.location='game1.html';">
 
-  <script type="text/javascript">
-  var soundList = 
-      [QA.create('1', "ATM.mp3", "ATM.jpg"),
-       QA.create('2', "auto.mp3", "auto.jpg"),
-       QA.create('3', "cooldrink.mp3", "cooldrink.jpg"),
-       QA.create('4', "doctor.mp3", "doctor.jpg"),
-       QA.create('5', "hospital.mp3", "hospital.jpg"),
-       QA.create('6', "large.mp3", "large.jpg"),
-       QA.create('7', "shirt.mp3", "shirt.jpg"),
-       QA.create('8', "small.mp3", "small.jpg"),
-       QA.create('9', "talk.mp3", "talk.jpg"),
-       QA.create('10', "time.mp3", "time.jpg")];
-  var jsonData = { 'allsounds': soundList };
-  
-  var templateManager = new TemplateManager();
-  templateManager.applyTemplate(jsonData);
-  </script>
+  <script type="text/javascript" src="javascript/client.js"></script>
 </body>
 </html>
