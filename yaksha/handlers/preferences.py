@@ -19,10 +19,14 @@ class Preferences(FormHandler):
     return childList
 
   def get(self):
-    username = users.get_current_user().nickname()
-    user = User.retrieve(User, username)
-    root = SyllabusUnit.all().filter('name', "CBSE Mathematics 6th").fetch(1)[0]
-    syllabus = self.fetchChildren(root)
+    user = users.get_current_user()
+    username = ""
+    syllabus = ""
+    if user:
+      username = user.nickname()
+      user = User.retrieve(User, username)
+      root = SyllabusUnit.all().filter('name', "CBSE Mathematics 6th").fetch(1)[0]
+      syllabus = self.fetchChildren(root)
 
     self.template_values = {
       'username' : username,                            

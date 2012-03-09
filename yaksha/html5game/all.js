@@ -42,6 +42,7 @@ var reloadAppCache = function() {
         }
       }
     }, false);
+    cache.update();
   }
 };
 
@@ -216,12 +217,15 @@ function getNestedTemplates() {
 // API methods
 // //////////////////////////////////////////////////////////////////////////
 
+var jsonData = null;
+
 /**
  * @param {String} relativeUrl - url from which to fetch data
  * @param {String|function} loadDataCallback - callback method to be invoked after fetch
  * @return - asynchronous. callback is is invoked with jsonData fetched
  */
 function fetchAndBindData(relativeUrl, loadDataCallback) {
+  jsonData = null;
   getNestedTemplates();
   if (typeof loadDataCallback == "string") {
     xhReq.loadDataCallback = eval(loadDataCallback);
@@ -231,7 +235,9 @@ function fetchAndBindData(relativeUrl, loadDataCallback) {
   requestRefresh(makeAbsoluteUrl(relativeUrl));
 }
 
-var jsonData = null;
+
+function jsonDataAvailable() { return jsonData != null; }
+
 function prepareQuestions(tjsonData) {
   jsonData = tjsonData;
   jsonData['qa'] = createQuestions(jsonData['allsounds'], 1, 
@@ -281,6 +287,8 @@ if (typeof android == "undefined") {
     if (!e) {
       e = document.createElement("audio");
       e.id = "audio";
+      e.style.display = "none";
+      document.body.appendChild(e);
     }
     e.pause();
     e.src = url;

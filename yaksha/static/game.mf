@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 7 feb 2012 v0.194
+# 7 feb 2012 v0.197
 lesson1.data
 gameindex.html
 html5game/hindi.js

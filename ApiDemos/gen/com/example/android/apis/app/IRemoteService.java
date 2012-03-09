@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\Users\\sridhar\\workspace\\ApiDemos\\src\\com\\example\\android\\apis\\app\\IRemoteService.aidl
+ * Original file: C:\\Users\\sridhar\\git\\mazaa\\ApiDemos\\src\\com\\example\\android\\apis\\app\\IRemoteService.aidl
  */
 package com.example.android.apis.app;
 /**
