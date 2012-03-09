@@ -8,6 +8,14 @@ handlers:
   static_dir: stylesheets
   mime_type: text/css
   
+- url: /gameindex.html
+  static_files: gameindex.html
+  mime_type: text/html
+  upload: /gameindex.html
+  
+- url: /html5game
+  static_dir: html5game
+  
 - url: /(.*\.html)
   static_files: static/\1
   upload: static/(.*\.html)

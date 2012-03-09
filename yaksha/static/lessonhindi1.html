@@ -7,10 +7,11 @@
     <script type="text/javascript" src="javascript/util.js"></script>
     <script type="text/javascript" src="javascript/template.js"></script>
     <script type="text/javascript" src="javascript/template_ops.js"></script>
+    <script type="text/javascript" src="javascript/client.js"></script>
     <script>
+      var templateManager = null;
       function evalAnswers() {
-        var jsonData = templateManager.jsonData;
-        var wordList = jsonData['wordList'];
+        var wordList = templateManager.jsonData['wordList'];
         var correct = 0;
         for (var i = 0; i < wordList.length; i++) {
           var radioboxes = document.forms[0]['id' + wordList[i].id];
@@ -20,7 +21,7 @@
             }
           }
         }
-        prepareQuestions(jsonData);
+        prepareQuestions(templateManager.jsonData);
       }
       
       function increaseScore(amt) {
@@ -46,6 +47,9 @@
       function prepareQuestions(jsonData) {
         jsonData['wordList'] = createQuestions(jsonData['words'], 1, 
                                                NUM_ANSWER_CHOICES);
+        if (!templateManager) { // Cannot create until body is loaded
+          templateManager = new TemplateManager();
+        }
         templateManager.applyTemplate(jsonData);
       }
     </script>
@@ -70,6 +74,5 @@
     </div>
     </form>
     </font>
-    <script type="text/javascript" src="javascript/client.js"></script>
   </body>
 </html>

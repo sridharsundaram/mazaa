@@ -8,18 +8,6 @@
  */
 
 // {{ could be replaced by %7B%7B by browser
-var reBeginDelimiter = '(?:(?:{{)|(?:%7B%7B))';
-var reName = '[ ]*([a-zA-Z_/][-A-Za-z0-9_/]*)[ ]*';
-var reFormatterOptional = '(?:(?: *[|] *)' + reName + ')?';
-// }} could be replaced by %7D%7D by browser
-var reEndDelimiter = '(?:(?:}})|(?:%7D%7D))';
-var reVariable = reBeginDelimiter + reName + reFormatterOptional +
-                 reEndDelimiter;
-//                                  match(1)  match(2)
-//                                  variable  formatter
-/** Regex used for matching out variables in a string */
-var variableRegex = new RegExp(reVariable, 'g');
-
 /**
  * returns string with " escaped with \"
  * Safe to repeatedly escape the same string (does not double-escape)

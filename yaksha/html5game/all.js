@@ -27,7 +27,7 @@ console.log = function(str) {
   }
 };
 
-// Reload AppCache.
+//Reload AppCache.
 var reloadAppCache = function() {
   var cache = window.applicationCache;
   if (cache) {
@@ -217,7 +217,7 @@ function getNestedTemplates() {
 
 /**
  * @param {String} relativeUrl - url from which to fetch data
- * @param {function} loadDataCallback - callback method to be invoked after fetch
+ * @param {String|function} loadDataCallback - callback method to be invoked after fetch
  * @return - asynchronous. callback is is invoked with jsonData fetched
  */
 function fetchAndBindData(relativeUrl, loadDataCallback) {
@@ -227,6 +227,183 @@ function fetchAndBindData(relativeUrl, loadDataCallback) {
   } else {
     xhReq.loadDataCallback = loadDataCallback;
   }
-  requestRefresh(window.location.protocol + '//' + window.location.host + 
-                 relativeUrl);
+  requestRefresh(makeAbsoluteUrl(relativeUrl));
+}
+
+var jsonData = null;
+function prepareQuestions(tjsonData) {
+  jsonData = tjsonData;
+  jsonData['wordList'] = createQuestions(jsonData['words'], 1, 
+                                         NUM_ANSWER_CHOICES);
+}
+
+function getChoice(i) {
+  if (jsonData) {
+    return jsonData['wordList'][0].choices[i].choice;
+  }
+  return '?';
+}
+
+function getQuestion() {
+  if (jsonData) {
+    return jsonData['wordList'][0].question;
+  }
+  return '?';
+}
+
+function getAnswer() {
+  if (jsonData) {
+    return jsonData['wordList'][0].answer;
+  }
+  return '??';
+}
+
+//Copyright Mazaa Learn 2012
+//@author Sridhar Sundaram
+
+var NUM_ANSWER_CHOICES = 4;
+
+Mazaa = function() {
+};
+
+// android interface is defined internally for Android webview.
+if (typeof android == "undefined") {
+  Mazaa.prototype.isBrowser = true;
+  /**
+   * Plays the audio corresponding to url.
+   * 
+   * @param url -
+   *          url of the audio
+   */
+  Mazaa.prototype.playAudio = function(url) {
+    var e = document.getElementById("audio");
+    if (!e) {
+      e = document.createElement("audio");
+      e.id = "audio";
+    }
+    e.pause();
+    e.src = url;
+    e.load();
+    e.play();
+  }
+} else { // Android Webview
+  Mazaa.prototype.isBrowser = false;
+  Mazaa.prototype.playAudio = function(url) {
+    android.playAudio(url);
+  }
+}
+
+function makeAbsoluteUrl(relativeUrl) {
+  return location.protocol + '//' + location.host + "/" + relativeUrl;
+}
+
+mazaa = new Mazaa();
+
+// Copyright Mazaa Learn 2012
+// @author Sridhar Sundaram
+
+/**
+ * Swap ith and jth elements of array
+ */
+function swapArrayItems(array, i, j) {
+  var t = array[i];
+  array[i] = array[j];
+  array[j] = t;
+}
+
+/**
+ * Shuffles elements of array
+ * 
+ * @param array
+ */
+function shuffle(array) {
+  for ( var i = 0; i < array.length - 1; i++) {
+    var rnd = i + Math.floor(Math.random() * (array.length - i));
+    swapArrayItems(array, i, rnd);
+  }
+}
+
+/**
+ * Randomly chooses numChoices indices given range low..high to choose from
+ * Precondition: high - low + 1 > numChoices
+ * 
+ * @param {Integer}
+ *          low - low end of range inclusive
+ * @param {Integer}
+ *          high - high end of range inclusive
+ * @param {Integer}
+ *          numChoices - number of choices required
+ * @param {Integer}
+ *          ansIndex - index of answer
+ * @return array of choice indices (no duplicates)
+ */
+function createChoices(low, high, numChoices, ansIndex) {
+  var choiceIndices = [ ansIndex ];
+  while (choiceIndices.length < numChoices) {
+    var rnd = low + Math.floor(Math.random() * (high - low + 1));
+    if (choiceIndices.indexOf(rnd) == -1) {
+      // TODO(ssundaram): this is inefficient - can be done better.
+      choiceIndices.push(rnd);
+    }
+  }
+  return choiceIndices;
+}
+
+function QuestionAnswer() {
+}
+
+/**
+ * Randomly creates numQuestions multiple-choice questions. Given an array of
+ * [question, answer] pairs, outputs questions each with question, numChoices
+ * choices and answer.
+ * 
+ * @param {Array.
+ *          <Array.<question, answer>>} qaArray - array of qa pairs
+ * @param {Integer}
+ *          numQuestions - number of questions to be generated
+ * @param {Integer}
+ *          numAnswerChoices - number of answer choices per question
+ * @return {Array.<Object.<question, answer, Array.<choices>>} list of qa
+ */
+QuestionAnswer.prototype.create = function(id, question, answer, opt_choices) {
+  return {
+    id : id,
+    question : question,
+    answer : answer,
+    choices : opt_choices
+  };
+}
+
+QuestionAnswer.prototype.compare = function(that) {
+  return this.question == that.question && this.answer == that.answer
+      && Array.equals(this.choices, that.choices);
+}
+
+var QA = new QuestionAnswer();
+
+function createQuestions(qaArray, numQuestions, numAnswerChoices) {
+  var qaList = [];
+  for ( var i = 0; i < numQuestions; i++) {
+    // Choose the question-answer pair
+    var qaIndex = i + Math.floor(Math.random() * (qaArray.length - i));
+    // Generate choices - for now, we choose randomly
+    var ansChoices = createChoices(0, qaArray.length - 1, numAnswerChoices,
+        qaIndex);
+    // Set up the choices
+    var choices = [];
+    for ( var j = 0; j < numAnswerChoices; j++) {
+      var choice = qaArray[ansChoices[j]].answer;
+      choices.push({
+        choice : choice,
+        correct : choice == qaArray[qaIndex].answer
+      });
+    }
+    shuffle(choices);
+    qaArray[qaIndex].choices = choices;
+    qaList.push(qaArray[qaIndex]);
+    // Ensure this question-answer pair will not be used for another question.
+    swapArrayItems(qaArray, i, qaIndex);
+  }
+
+  return qaList;
 }

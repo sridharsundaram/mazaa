@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 7 feb 2012 v0.192
+# 7 feb 2012 v0.193
 lesson1.html
 lesson1.data
 game1.html

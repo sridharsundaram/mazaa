@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Utility functions.
- * @author gagansingh@google.com (Gagan Singh)
+ * @author sridhar.sundaram@gmail.com (Sridhar Sundaram)
  */
 
 var ORIGINAL_SCRIPT_NODE = '_original_script_node';
