@@ -45,6 +45,7 @@ var reloadAppCache = function() {
   }
 };
 
+reloadAppCache();
 window.addEventListener('load', reloadAppCache);
 
 // //////////////////////////////////////////////////////////////////////////
@@ -233,29 +234,29 @@ function fetchAndBindData(relativeUrl, loadDataCallback) {
 var jsonData = null;
 function prepareQuestions(tjsonData) {
   jsonData = tjsonData;
-  jsonData['wordList'] = createQuestions(jsonData['words'], 1, 
+  jsonData['qa'] = createQuestions(jsonData['allsounds'], 1, 
                                          NUM_ANSWER_CHOICES);
 }
 
 function getChoice(i) {
   if (jsonData) {
-    return jsonData['wordList'][0].choices[i].choice;
+    return jsonData['qa'][0].choices[i].choice;
   }
   return '?';
 }
 
 function getQuestion() {
   if (jsonData) {
-    return jsonData['wordList'][0].question;
+    return jsonData['qa'][0].question;
   }
   return '?';
 }
 
 function getAnswer() {
   if (jsonData) {
-    return jsonData['wordList'][0].answer;
+    return jsonData['qa'][0].answer;
   }
-  return '??';
+  return '?';
 }
 
 //Copyright Mazaa Learn 2012
@@ -299,6 +300,9 @@ function makeAbsoluteUrl(relativeUrl) {
 
 mazaa = new Mazaa();
 
+function playAudio(url) {
+  mazaa.playAudio(makeAbsoluteUrl(url));
+}
 // Copyright Mazaa Learn 2012
 // @author Sridhar Sundaram
 

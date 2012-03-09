@@ -1,13 +1,21 @@
+from base.form_handler import FormHandler
 from datamodel.word import Word
-from google.appengine.ext import webapp
 import simplejson
 
-class Vocabulary(webapp.RequestHandler):
+class Vocabulary(FormHandler):
   authorize = False
   
   def get(self):
     self.jsonData = Word.all().fetch(1000)
-    self.jsonData = { "words":  [ {'id': word.key().id(), 'question': word.langA, 
-                                'answer': word.langB } for word in self.jsonData]};
+    lang = self.request.params.get('lang')
+    if lang == 'a2b':
+      words = [ {'id': word.key().id(), 
+                 'question': word.langA, 
+                 'answer': word.langB } for word in self.jsonData]
+    else:
+      words = [ {'id': word.key().id(), 
+                 'question': word.langB, 
+                 'answer': word.langA } for word in self.jsonData]      
+    self.jsonData = { "words":  words};
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(simplejson.dumps(self.jsonData))
