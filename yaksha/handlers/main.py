@@ -1,5 +1,9 @@
 import wsgiref.handlers
 import os
+import sys
+
+sys.path.insert(0, '../sympy.zip')  # or whatever
+
 import init
 
 #settings._target = None

@@ -33,7 +33,7 @@ public class JavaScriptInterface {
         mMediaPlayer.stop();
         mMediaPlayer.release();
       }
-      Log.d("Play Audio", "Playing cached file");
+      Log.d("Play Audio", "Playing cached file: " + url);
       Map<String, String> headers = new HashMap<String, String>();
       CacheManager.CacheResult cacheResult = CacheManager.getCacheFile(url,
           headers);
@@ -67,7 +67,7 @@ public class JavaScriptInterface {
         mMediaPlayer.stop();
         mMediaPlayer.release();
       }
-      Log.d("Play Audio", "Playing recorded file");
+      Log.d("Play Audio", "Playing recorded file: " + path);
       FileInputStream in = new FileInputStream(path);
       mMediaPlayer = new MediaPlayer();
       mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

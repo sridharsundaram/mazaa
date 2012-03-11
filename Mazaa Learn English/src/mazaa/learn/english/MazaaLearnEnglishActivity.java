@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 public class MazaaLearnEnglishActivity extends Activity {
 
   private static final String PRODUCTION_HOST = "yaksha-sridhar.appspot.com";
-  private static final String DEBUG_HOST = "192.168.0.6:8080"; // "10.0.2.2:8080";
+  private static final String DEBUG_HOST = "10.0.2.2:8080";
   private static final String JAVASCRIPT_INTERFACE = "android";
   private MediaPlayer mMediaPlayer;
 

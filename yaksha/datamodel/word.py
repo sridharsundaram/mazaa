@@ -1,6 +1,5 @@
-from base.formdb import Formdb
 from google.appengine.ext import db
 
-class Word(Formdb):
+class Word(db.Model):
   langA = db.StringProperty()
   langB = db.StringProperty()

@@ -7,7 +7,7 @@
   <license>Free to use, also for commercial games.</license>
   <description>Maza related extensions</description>
   <helpfile></helpfile>
-  <hidden>0</hidden>
+  <hidden>-1</hidden>
   <installdir></installdir>
   <files>
     <file>
@@ -21,7 +21,7 @@
           <name>fetchAndBindData</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>7</id>
+          <id>1</id>
           <help>fetchAndBinData(relativeUrl, callback)</help>
           <hidden>0</hidden>
           <returnType>3</returnType>
@@ -35,7 +35,7 @@
           <name>getChoice</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>9</id>
+          <id>3</id>
           <help>getChoice(i) returns ith choice</help>
           <hidden>0</hidden>
           <returnType>1</returnType>
@@ -48,7 +48,7 @@
           <name>getQuestion</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>11</id>
+          <id>5</id>
           <help>getQuestion()</help>
           <hidden>0</hidden>
           <returnType>1</returnType>
@@ -59,7 +59,7 @@
           <name>getAnswer</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>13</id>
+          <id>7</id>
           <help>getAnswer</help>
           <hidden>0</hidden>
           <returnType>1</returnType>
@@ -70,7 +70,7 @@
           <name>playAudio</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>14</id>
+          <id>9</id>
           <help>playAudio(url)</help>
           <hidden>0</hidden>
           <returnType>3</returnType>
@@ -83,7 +83,7 @@
           <name>makeAbsoluteUrl</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>15</id>
+          <id>11</id>
           <help>makeAbsoluteUrl(string) : string</help>
           <hidden>0</hidden>
           <returnType>1</returnType>
@@ -96,7 +96,7 @@
           <name>jsonDataAvailable</name>
           <externalName></externalName>
           <kind>11</kind>
-          <id>16</id>
+          <id>13</id>
           <help>jsonDataAvailable()</help>
           <hidden>0</hidden>
           <returnType>2</returnType>

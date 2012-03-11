@@ -7,6 +7,10 @@ for (i = 0; i < num; i += 1) {
     self.sprite = sprite_add(makeAbsoluteUrl(picUrl), 1, 0, 0, 0, 0);
   }
 }
+with (instance_find(obj_question, 0)) {
+  self.sndUrl = getQuestion();
+}
+
 sleep(1000);
 
 

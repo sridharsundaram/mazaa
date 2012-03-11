@@ -42,7 +42,6 @@ var reloadAppCache = function() {
         }
       }
     }, false);
-    cache.update();
   }
 };
 

@@ -101,7 +101,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (getAnswer() == self.picUrl) {
+            <string>if (string(getAnswer()) == self.picUrl) {
   sound_play(snd_success);
   score = score + 10;
   global.sc = score;

@@ -51,9 +51,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (string(self.sndUrl) == "?") {
-  self.sndUrl = getQuestion();
-  sleep(1000);
+            <string>if (string(self.sndUrl) != "?") {
   playAudio(string(self.sndUrl));
 }
 </string>
