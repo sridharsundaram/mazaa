@@ -29,6 +29,23 @@ if (typeof android == "undefined") {
   Mazaa.prototype.playAudio = function(url) { android.playAudio(url); }
 }
 
+Mazaa.prototype.playAudioSequence = function(urlArray) {
+  if (urlArray.length == 0) return;
+  var e = document.getElementById("audio");
+  if (!e) {
+      e = document.createElement("audio");
+      e.id = "audio";
+      e.style.display = "none";
+      document.body.appendChild(e);
+  }
+  
+  var url = urlArray.shift();
+  e.src = url;
+  e.load();
+  e.addEventListener('ended', function() { Mazaa.prototype.playAudioSequence(urlArray); });
+  e.play();
+}
+
 function makeAbsoluteUrl(relativeUrl) {
   return location.protocol + '//' + location.host + "/" + relativeUrl;
 }

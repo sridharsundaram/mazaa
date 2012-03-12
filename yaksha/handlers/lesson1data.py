@@ -17,4 +17,6 @@ class Lesson1Data(webapp.RequestHandler):
                        {'id': '9', 'question': "talk.mp3", 'answer': "talk.jpg"},
                        {'id': '10', 'question': "time.mp3", 'answer': "time.jpg"}] }
     self.response.headers['Content-Type'] = 'application/json'
+    self.response.headers['Content-Disposition'] = "attachment; filename=l.json"
+    self.response.headers['Cache-Control'] = 'max-age=3600'
     self.response.out.write(simplejson.dumps(self.jsonData))

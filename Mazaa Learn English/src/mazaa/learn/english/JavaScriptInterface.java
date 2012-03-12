@@ -30,9 +30,13 @@ public class JavaScriptInterface {
   public void playAudio(String url) {
     try {
       if (mMediaPlayer != null) {
-        mMediaPlayer.stop();
+        if (mMediaPlayer.isPlaying() || mMediaPlayer.isLooping()) {
+          mMediaPlayer.stop();
+        }
         mMediaPlayer.release();
+        mMediaPlayer = null;
       }
+      if (url.endsWith("?")) return;
       Log.d("Play Audio", "Playing cached file: " + url);
       Map<String, String> headers = new HashMap<String, String>();
       CacheManager.CacheResult cacheResult = CacheManager.getCacheFile(url,

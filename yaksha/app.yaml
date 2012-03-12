@@ -38,6 +38,10 @@ handlers:
   static_files: static/images/\1
   upload: static/images/(.*\.jpg)
 
+- url: /\?
+  static_files: static/audio/ATM.mp3
+  upload: static/audio/ATM.mp3
+
 - url: /.*
   script: handlers/main.py
 #  login: required

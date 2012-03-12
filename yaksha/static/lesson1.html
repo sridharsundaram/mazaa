@@ -23,7 +23,8 @@
     <h4>Scene</h4>
   <div id="scene" class="album">
     <div data-bind-id="allsounds" class="img">
-       <img height=100 width=100 xbl2:src="{{answer}}" onclick="mazaa.playAudio(makeAbsoluteUrl('{{question}}'))">
+       <img height=100 width=100 xbl2:src="{{answer}}" 
+            onclick="mazaa.playAudioSequence([makeAbsoluteUrl('{{question}}'), makeAbsoluteUrl('{{question}}')])">
     </div>
   </div>  
   <input type="button" value="Play game" onclick="window.location='game1.html';">

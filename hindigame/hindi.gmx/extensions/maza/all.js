@@ -308,7 +308,9 @@ function makeAbsoluteUrl(relativeUrl) {
 mazaa = new Mazaa();
 
 function playAudio(url) {
-  mazaa.playAudio(makeAbsoluteUrl(url));
+  if (url != '?') { // Temporary - somehow comes in as ?
+    mazaa.playAudio(makeAbsoluteUrl(url));
+  }
 }
 // Copyright Mazaa Learn 2012
 // @author Sridhar Sundaram
