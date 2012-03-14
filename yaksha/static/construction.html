@@ -1,0 +1,32 @@
+<!-- Copyright Mazaa Learn 2012 -->
+<!-- @author Rishi Chandra -->
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="javascript/construct.js"></script>
+
+<link rel="stylesheet" type="text/css" href="stylesheets/construct.css" />
+<title>Click, Drag to Box</title>
+</head>
+
+<body onload="makeTable()">
+<h3>Click, Drag Images</h3>
+<h3 id="countDown"></h3>
+<img onclick="play()" src="speaker.jpg" height="36" width="36"</img>
+<audio id="audiotag1" src="hindi.mp3" preload="auto"></audio>
+<audio id="aud-silence" src="silence.mp3" preload="auto"></audio>
+<table>
+<tr>
+<td>
+	<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+</td>
+<td>
+	<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+</td>
+<td>
+	<div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,7 @@
+﻿#div1 {width:100px;height:100px;padding:10px;border:1px solid #aaaaaa;}
+#div2 {width:100px;height:100px;padding:10px;border:1px solid #aaaaaa;}
+#div3 {width:100px;height:100px;padding:10px;border:1px solid #aaaaaa;}
+table,th,td 
+{border:2px solid green;}
+td{text-align:center;}
+th{background-color:green; color:white;}

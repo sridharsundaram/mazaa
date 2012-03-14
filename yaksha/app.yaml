@@ -38,6 +38,16 @@ handlers:
   static_files: static/images/\1
   upload: static/images/(.*\.jpg)
 
+
+- url: /(.*\.png)
+  static_files: static/images/\1
+  upload: static/images/(.*\.png)
+
+
+- url: /(.*\.swf)
+  static_files: static/\1
+  upload: static/(.*\.swf)
+
 - url: /\?
   static_files: static/audio/ATM.mp3
   upload: static/audio/ATM.mp3
