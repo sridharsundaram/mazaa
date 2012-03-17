@@ -49,7 +49,7 @@ Wami.setup = function(options) {
 
 	var _options;
 	setOptions(options);
-       	embedWamiSWF(_options.id, Wami.nameCallback(delegateWamiAPI));
+  embedWamiSWF(_options.id, Wami.nameCallback(delegateWamiAPI));
 
 	function supportsTransparency() {
 		// Detecting the OS is a big no-no in Javascript programming, but

@@ -24,6 +24,9 @@ from handlers.import_spreadsheet import ImportWords
 from handlers.preferences import Preferences
 from handlers.vocabulary import Vocabulary
 from handlers.lesson1data import Lesson1Data
+from handlers.lesson2data import Lesson2Data
+from handlers.recordaudio import RecordAudio
+from handlers.serveaudio import ServeAudio
 
 class Yaksha(Formdb):
   id_field = 'app_num'
@@ -52,6 +55,8 @@ def main():
                                          ('/importwords', ImportWords),
                                          ('/vocabulary', Vocabulary),
                                          ('/lesson1.data', Lesson1Data),
+                                         ('/lesson2.data', Lesson2Data),
+                                         ('/recordaudio', RecordAudio),
                                         ],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)

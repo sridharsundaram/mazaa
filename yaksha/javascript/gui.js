@@ -2,8 +2,15 @@ var Wami = window.Wami || {};
 
 // Upon a creation of a new Wami.GUI(options), we assume that a WAMI recorder
 // has been initialized.
+// options = { buttonUrl:'', // url for button image - optional
+//             listen: null, // to disable listening - optional
+//             id: '',       // id of div at which to attach GUI element - required
+//             singleButton: true // for single button - no separate play button - optional
+//             recordUrl: '' // url for recording at server
+//             playUrl: ''   // url for server which to play
+//           }
 Wami.GUI = function(options) {
-        var RECORD_BUTTON = 1;
+  var RECORD_BUTTON = 1;
 	var PLAY_BUTTON = 2;
 
 	setOptions(options);
