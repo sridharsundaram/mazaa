@@ -44,9 +44,10 @@
         var row = document.getElementById(id);
         var wami = document.getElementById('wami');
         row.appendChild(wami);
-        Wami.gui.setRecordUrl('recordaudio?id=' + id);
-        Wami.gui.setPlayUrl('recordaudio?id=' + id);
-        Wami.show();
+        var url = 'recordaudio?id=' + id;
+        Wami.gui.setRecordUrl(url);
+        Wami.gui.setPlayUrl(url);
+        //Wami.startRecording(url, null, function() { Wami.startPlaying(url); }, null);
       }  
     </script>
 </head>

@@ -66,3 +66,11 @@ Each problem gets tagged with multiple knowledge units.
 
 Given a syllabus item, we find all problems matching its knowledge unit.
 Hence a syllabus item will have (description, kuName, kuDifficulty, kuDomain) 
+
+
+------------------------------------------------------------
+git@github.com:sridharsundaram/simple.git
+
+appcfg.py --num_days=0 request_logs <local app directory> output.txt
+local app directory is c:\users\sridhar\git\simple\simple
+appcfg.py --num_days=0 request_logs c:\users\sridhar\git\simple\simple output.txt

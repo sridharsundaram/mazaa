@@ -6,9 +6,11 @@ package mazaa.learn.english;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -18,11 +20,17 @@ import android.webkit.WebViewClient;
 
 public class MazaaLearnEnglishActivity extends Activity {
 
-  private static final String PRODUCTION_HOST = "yaksha-sridhar.appspot.com";
-  private static final String DEBUG_HOST = "192.168.0.6:8080"; // "10.0.2.2:8080"; 
+  private static final String PRODUCTION_HOST = "mazalearn.appspot.com";
+  private static final String DEBUG_HOST = "10.0.2.2:8080"; // "192.168.0.16:8080";
   private static final String JAVASCRIPT_INTERFACE = "android";
   private MediaPlayer mMediaPlayer;
 
+  private String getPhoneNumber() {
+    TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+    String msisdn = tMgr.getLine1Number();
+    return msisdn.substring(msisdn.length() - 10);
+  }
+  
   @Override
   public void onCreate(Bundle savedState) {
     super.onCreate(savedState);
@@ -30,7 +38,7 @@ public class MazaaLearnEnglishActivity extends Activity {
     WebView myWebView = (WebView) findViewById(R.id.webview);
     String host = android.os.Debug.isDebuggerConnected() ? DEBUG_HOST
         : PRODUCTION_HOST;
-    myWebView.loadUrl("http://" + host + "/gameindex.html");
+    myWebView.loadUrl("http://" + host + "/" + getPhoneNumber());
     WebSettings webSettings = myWebView.getSettings();
     // Local storage
     webSettings.setDomStorageEnabled(true);
