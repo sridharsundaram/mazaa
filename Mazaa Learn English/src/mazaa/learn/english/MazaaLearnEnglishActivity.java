@@ -1,4 +1,4 @@
-// Copyright Mazaa Learn 2012
+// Copyright Maza Learn 2012
 // @author Sridhar Sundaram
 
 package mazaa.learn.english;
@@ -21,7 +21,7 @@ import android.webkit.WebViewClient;
 public class MazaaLearnEnglishActivity extends Activity {
 
   private static final String PRODUCTION_HOST = "mazalearn.appspot.com";
-  private static final String DEBUG_HOST = "10.0.2.2:8080"; // "192.168.0.16:8080";
+  private static final String DEBUG_HOST = "10.0.2.2:8080"; // "192.168.0.16:8080"; -- firewall issues ??
   private static final String JAVASCRIPT_INTERFACE = "android";
   private MediaPlayer mMediaPlayer;
 
@@ -73,10 +73,16 @@ public class MazaaLearnEnglishActivity extends Activity {
     // properly
     // this seems to make things work with Android 2.1, but not 2.2
     // myWebView.requestFocusFromTouch();
+
+    // recordAudio(cacheDir, javaScriptInterface);
+  }
+
+  private void recordAudio(String cacheDir,
+      JavaScriptInterface javaScriptInterface) {
     final AudioRecorder recorder = new AudioRecorder(cacheDir + "/temp4.3gp");
     try {
       recorder.start();
-      //….wait a while
+      //….wait a while, better would be to time out and stop
       Thread.sleep(4000); 
       recorder.stop();
       Log.i("Record Audio", "Recording done");

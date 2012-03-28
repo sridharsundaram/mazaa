@@ -1,4 +1,4 @@
-// Copyright Mazaa Learn 2012
+// Copyright Maza Learn 2012
 // @author Sridhar Sundaram
 
 package mazaa.learn.english;
