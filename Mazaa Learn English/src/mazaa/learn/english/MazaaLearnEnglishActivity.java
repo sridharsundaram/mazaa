@@ -21,14 +21,33 @@ import android.webkit.WebViewClient;
 public class MazaaLearnEnglishActivity extends Activity {
 
   private static final String PRODUCTION_HOST = "mazalearn.appspot.com";
-  private static final String DEBUG_HOST = "10.0.2.2:8080"; // "192.168.0.16:8080"; -- firewall issues ??
+  private static final String DEBUG_EMULATOR_HOST = "10.0.2.2:8080"; 
+  private static final String DEBUG_DEVICE_HOST = "192.168.0.16:8080";
   private static final String JAVASCRIPT_INTERFACE = "android";
   private MediaPlayer mMediaPlayer;
 
-  private String getPhoneNumber() {
-    TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-    String msisdn = tMgr.getLine1Number();
-    return msisdn.substring(msisdn.length() - 10);
+  /**
+   * @return the correct Host serving the web-pages for the web view.
+   */
+  private String getMazaUrl() {
+    TelephonyManager tMgr = 
+        (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+    String networkOperator = "";
+    String path = "";
+    try {
+      String msisdn = tMgr.getLine1Number();
+      path = msisdn.substring(msisdn.length() - 10);
+      networkOperator = tMgr.getNetworkOperatorName();
+    } catch(RuntimeException e) {
+      // Ignore: Phone does not have a SIM card.
+    }
+    String host = PRODUCTION_HOST;
+    if("Android".equals(networkOperator)) { // Emulator
+      host = DEBUG_EMULATOR_HOST;
+    } else if (android.os.Debug.isDebuggerConnected()) { // Device
+      host = DEBUG_DEVICE_HOST;
+    }
+    return "http://" + host + "/" + path;
   }
   
   @Override
@@ -36,9 +55,7 @@ public class MazaaLearnEnglishActivity extends Activity {
     super.onCreate(savedState);
     setContentView(R.layout.main);
     WebView myWebView = (WebView) findViewById(R.id.webview);
-    String host = android.os.Debug.isDebuggerConnected() ? DEBUG_HOST
-        : PRODUCTION_HOST;
-    myWebView.loadUrl("http://" + host + "/" + getPhoneNumber());
+    myWebView.loadUrl(getMazaUrl());
     WebSettings webSettings = myWebView.getSettings();
     // Local storage
     webSettings.setDomStorageEnabled(true);
