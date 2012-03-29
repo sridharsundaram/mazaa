@@ -1,7 +1,7 @@
 // Copyright Maza Learn 2012
 // @author Sridhar Sundaram
 
-package mazaa.learn.english;
+package maza.learn.english;
 
 import java.io.File;
 import java.io.IOException;

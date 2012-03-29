@@ -1,7 +1,7 @@
 // Copyright Maza Learn 2012
 // @author Sridhar Sundaram
 
-package mazaa.learn.english;
+package maza.learn.english;
 
 import java.io.IOException;
 
@@ -18,9 +18,9 @@ import android.webkit.WebStorage.QuotaUpdater;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class MazaaLearnEnglishActivity extends Activity {
+public class MazaLearnEnglishActivity extends Activity {
 
-  private static final String PRODUCTION_HOST = "mazalearn.appspot.com";
+  private static final String PRODUCTION_HOST = "m.mazalearn.com";
   private static final String DEBUG_EMULATOR_HOST = "10.0.2.2:8080"; 
   private static final String DEBUG_DEVICE_HOST = "192.168.0.16:8080";
   private static final String JAVASCRIPT_INTERFACE = "android";
