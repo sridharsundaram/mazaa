@@ -3,13 +3,16 @@
 
 package maza.learn.english;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.CacheManager;
@@ -17,10 +20,13 @@ import android.webkit.CacheManager;
 public class JavaScriptInterface {
   Context mContext;
   private MediaPlayer mMediaPlayer;
+  private MediaRecorder mMediaRecorder;
+  private final File cacheDir;
 
   /** Instantiate the interface and set the context */
   JavaScriptInterface(Context c) {
     mContext = c;
+    cacheDir = c.getCacheDir();
   }
 
   /**
@@ -65,7 +71,8 @@ public class JavaScriptInterface {
    * Plays audio file located at path
    * @param path - path for audio file
    */
-  public void playRecordedAudio(String path) {
+  public void playRecording(String fileName) {
+    String path = cacheDir + fileName;
     try {
       if (mMediaPlayer != null) {
         mMediaPlayer.stop();
@@ -85,7 +92,29 @@ public class JavaScriptInterface {
     }
   }
 
-  public String recordAudio() {
-    return null;
+  public void startRecording(String fileName) throws IOException {
+    // make sure the directory we plan to store the recording in exists
+    String path = cacheDir + fileName;
+    File directory = new File(path).getParentFile();
+    if (!directory.exists() && !directory.mkdirs()) {
+      throw new IOException("Path to file could not be created.");
+    }
+
+    mMediaRecorder = new MediaRecorder();
+    mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+    mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+    mMediaRecorder.setOutputFile(path);
+    mMediaRecorder.prepare();
+    mMediaRecorder.start();
+  }
+
+  /**
+   * Stops a recording that has been previously started.
+   */
+  public void stopRecording() throws IOException {
+    mMediaRecorder.stop();
+    mMediaRecorder.release();
+    mMediaRecorder = null;
   }
 }

@@ -16,14 +16,14 @@ public class AudioRecorder {
   /**
    * Creates a new audio recording at the given path.
    */
-  public AudioRecorder(String path) {
-    this.path = path;
+  public AudioRecorder() {
+    this.path = "";
   }
 
   /**
    * Starts a new recording.
    */
-  public void start() throws IOException {
+  public void start(String path) throws IOException {
     // make sure the directory we plan to store the recording in exists
     File directory = new File(path).getParentFile();
     if (!directory.exists() && !directory.mkdirs()) {

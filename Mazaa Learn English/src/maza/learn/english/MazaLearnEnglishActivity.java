@@ -21,7 +21,8 @@ import android.webkit.WebViewClient;
 public class MazaLearnEnglishActivity extends Activity {
 
   private static final String PRODUCTION_HOST = "m.mazalearn.com";
-  private static final String DEBUG_EMULATOR_HOST = "10.0.2.2:8080"; 
+  private static final String DEBUG_EMULATOR_HOST = "10.0.2.2:8080";
+  // This will keep changing - dont know how to fix this.
   private static final String DEBUG_DEVICE_HOST = "192.168.0.16:8080";
   private static final String JAVASCRIPT_INTERFACE = "android";
   private MediaPlayer mMediaPlayer;
@@ -91,19 +92,17 @@ public class MazaLearnEnglishActivity extends Activity {
     // this seems to make things work with Android 2.1, but not 2.2
     // myWebView.requestFocusFromTouch();
 
-    // recordAudio(cacheDir, javaScriptInterface);
+    // recordAudio(javaScriptInterface);
   }
 
-  private void recordAudio(String cacheDir,
-      JavaScriptInterface javaScriptInterface) {
-    final AudioRecorder recorder = new AudioRecorder(cacheDir + "/temp4.3gp");
+  private void recordAudio(JavaScriptInterface javaScriptInterface) {
     try {
-      recorder.start();
+      javaScriptInterface.startRecording("/temp4.3gp");
       //….wait a while, better would be to time out and stop
       Thread.sleep(4000); 
-      recorder.stop();
+      javaScriptInterface.stopRecording();
       Log.i("Record Audio", "Recording done");
-      javaScriptInterface.playRecordedAudio(cacheDir + "/temp4.3gp");
+      javaScriptInterface.playRecording("/temp4.3gp");
       Log.i("Record Audio", "Playback done");
     } catch (IOException e) {
       // TODO Auto-generated catch block
