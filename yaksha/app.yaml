@@ -21,8 +21,8 @@ handlers:
   mime_type: text/javascript
 
 - url: /(.*\.gif)
-  static_files: static/images/\1
-  upload: static/images/(.*\.gif)
+  static_files: static/\1
+  upload: static/(.*\.gif)
 
 - url: /(.*\.mf)
   static_files: static/\1
@@ -54,6 +54,6 @@ handlers:
 
 - url: /.*
   script: handlers/main.py
-#  login: required
+  login: required
 
 

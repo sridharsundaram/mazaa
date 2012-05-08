@@ -11,27 +11,39 @@ directProportionCategory = Category(id = 1, name = "Direct Proportion")
 
 def initProblems():
   global directProportionCategory
+  ModelProblem.modelProblems.append(DirectProportionProblem)
+  ModelProblem.modelProblems.append(DirectProportionAmountProblem)
+  ModelProblem.modelProblems.append(DirectProportionQuantityProblem)
+  ModelProblem.modelProblems.append(DirectProportionRatioProblem)
   directProportionCategory.registerProblem(DirectProportionProblem)
   directProportionCategory.registerProblem(DirectProportionAmountProblem)
   directProportionCategory.registerProblem(DirectProportionQuantityProblem)
   directProportionCategory.registerProblem(DirectProportionRatioProblem)
   
   lcmCategory = Category(id = 2, name = "Least Common Multiple")
+  ModelProblem.modelProblems.append(LcmProblem)
   lcmCategory.registerProblem(LcmProblem)
   
   gcdCategory = Category(id = 3, name = "Greatest Common Divisor")
+  ModelProblem.modelProblems.append(GcdProblem)
   gcdCategory.registerProblem(GcdProblem)
   
   bodmasCategory = Category(id = 4, name = "BODMAS")
+  ModelProblem.modelProblems.append(BodmasProblem)
   bodmasCategory.registerProblem(BodmasProblem)
   
   inverseProportionCategory = Category(id = 5, name = "Inverse Proportion")
+  ModelProblem.modelProblems.append(InverseProportionProblem)
+  ModelProblem.modelProblems.append(InverseProportionTimeProblem)
+  ModelProblem.modelProblems.append(InverseProportionQuantityProblem)
+  ModelProblem.modelProblems.append(InverseProportionRatioProblem)
   inverseProportionCategory.registerProblem(InverseProportionProblem)
   inverseProportionCategory.registerProblem(InverseProportionTimeProblem)
   inverseProportionCategory.registerProblem(InverseProportionQuantityProblem)
   inverseProportionCategory.registerProblem(InverseProportionRatioProblem)
   
   compositionCategory = Category(id = 6, name = "Composition of Two Problems")
+  ModelProblem.modelProblems.append(LcmGcdProblem)
   compositionCategory.registerProblem(LcmGcdProblem)
  
 def initTemplatesInDb(force = False):

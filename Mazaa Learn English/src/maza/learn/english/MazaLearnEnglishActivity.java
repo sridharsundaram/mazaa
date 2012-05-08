@@ -26,6 +26,7 @@ public class MazaLearnEnglishActivity extends Activity {
   private static final String DEBUG_DEVICE_HOST = "192.168.0.16:8080";
   private static final String JAVASCRIPT_INTERFACE = "android";
   private MediaPlayer mMediaPlayer;
+  private static String mobileNumber;
 
   /**
    * @return the correct Host serving the web-pages for the web view.
@@ -37,7 +38,7 @@ public class MazaLearnEnglishActivity extends Activity {
     String path = "";
     try {
       String msisdn = tMgr.getLine1Number();
-      path = msisdn.substring(msisdn.length() - 10);
+      this.mobileNumber = msisdn.substring(msisdn.length() - 10);
       networkOperator = tMgr.getNetworkOperatorName();
     } catch(RuntimeException e) {
       // Ignore: Phone does not have a SIM card.
@@ -48,7 +49,7 @@ public class MazaLearnEnglishActivity extends Activity {
     } else if (android.os.Debug.isDebuggerConnected()) { // Device
       host = DEBUG_DEVICE_HOST;
     }
-    return "http://" + host + "/" + path;
+    return "http://" + host + "/" + this.mobileNumber;
   }
   
   @Override
@@ -70,10 +71,10 @@ public class MazaLearnEnglishActivity extends Activity {
     webSettings.setAllowFileAccess(true);
     webSettings.setAppCacheEnabled(true);
     webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-
     // Javascript
     webSettings.setJavaScriptEnabled(true);
-    JavaScriptInterface javaScriptInterface = new JavaScriptInterface(this);
+    JavaScriptInterface javaScriptInterface = 
+        new JavaScriptInterface(this, this.mobileNumber);
     myWebView.addJavascriptInterface(javaScriptInterface, JAVASCRIPT_INTERFACE);
 
     myWebView.setWebViewClient(new WebViewClient() {

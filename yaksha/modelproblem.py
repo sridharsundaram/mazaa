@@ -9,6 +9,9 @@ class ModelProblem:
   _DISTRACTORS = Symbol('distractors_')
   _ANSWERS = Symbol('answers_')
   
+  # List of all model problem classes
+  modelProblems = []
+  
   # The list of variables for this model problem along with their domains.
   # Each model problem is like a lambda expression over these variables.
   varDomains = {}
@@ -36,7 +39,21 @@ class ModelProblem:
     self.solution = {}
     # Unknown variable to be solved for. May be None to indicate that it may be randomly chosen.
     self.unknown = self.unknown if self.unknown != None else random.choice(self.varDomains.keys())
-    
+  
+  # Find and return list of model problems matching the knowledge unit
+  # @param str knowledgeUnits - knowledge units for which model problems to be found
+  @staticmethod
+  def findModelProblemsMatchingKnowledgeUnits(knowledgeUnits):
+    matchingModelProblems = []
+    for modelProblem in ModelProblem.modelProblems:
+      match = True
+      for knowledgeUnit in modelProblem.knowledgeUnits:
+        match = match and knowledgeUnit in knowledgeUnits
+      if match:
+        matchingModelProblems.append(modelProblem)
+
+    return matchingModelProblems
+      
   # @param list ansVariables - list of variables corresponding to answers
   # @param list equationVariables - list of variables for which equations have been solved
   # @param Domain domain - domain of the answer value

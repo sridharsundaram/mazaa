@@ -5,6 +5,7 @@ package maza.learn.english;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,27 @@ public class JavaScriptInterface {
   private MediaPlayer mMediaPlayer;
   private MediaRecorder mMediaRecorder;
   private final File cacheDir;
+  private final String mobileNumber;
 
   /** Instantiate the interface and set the context */
-  JavaScriptInterface(Context c) {
+  JavaScriptInterface(Context c, String mobileNumber) {
     mContext = c;
     cacheDir = c.getCacheDir();
+    this.mobileNumber = mobileNumber;
+  }
+  
+  /**
+   * @return android version of device.
+   */
+  public int getVersion() {
+    return android.os.Build.VERSION.SDK_INT;
+  }
+  
+  /**
+   * @return MobileNumber corresponding to this device.
+   */
+  public String getMobileNumber() {
+    return mobileNumber;
   }
 
   /**
@@ -50,7 +67,14 @@ public class JavaScriptInterface {
       if (cacheResult != null) {
         String fileName = mContext.getCacheDir() + "/webviewCache/"
             + cacheResult.getLocalPath();
-        FileInputStream in = new FileInputStream(fileName);
+        FileInputStream in;
+        try {
+          in = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+          fileName = mContext.getCacheDir() + "/webviewCacheChromiumStaging/"
+              + cacheResult.getLocalPath();
+          in = new FileInputStream(fileName);
+        }
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setDataSource(in.getFD());

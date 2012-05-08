@@ -37,7 +37,7 @@ class Configure(FormHandler):
   def post(self):
     user = self.processPostData()
     syllabusUnitIds = self.request.get_all('keys')
-    syllabusUnitKeys = [Key.from_path('SyllabusUnit', int(id)) for id in syllabusUnitIds]
+    syllabusUnitKeys = [Key.from_path('SyllabusUnit', int(iid)) for iid in syllabusUnitIds]
     user.syllabusUnitKeys = syllabusUnitKeys
     user.put()
     self.render(user)  

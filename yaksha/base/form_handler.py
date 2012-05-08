@@ -16,7 +16,7 @@ class FormHandler(webapp.RequestHandler):
 
   def get_value(self, form, field, type):
     if not form.has_key(field):
-      return None
+      return [] if type == 'List' else None
 
     logging.info("Converting field: <" + field + "> of type " + type)
 
@@ -85,7 +85,7 @@ class FormHandler(webapp.RequestHandler):
     else:
       self.update_item(form, item)
 
-    logging.info("Processed entity with Key = " + str(item.key()))
+    logging.info("Processed entity with Key = " + my_id)
     for field in item._properties.keys():
       logging.info(field + " = " + str(getattr(item, field)))
     

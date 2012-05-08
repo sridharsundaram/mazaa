@@ -1,8 +1,7 @@
 from base.form_handler import FormHandler
-from datamodel.categories import Category
-import random
 from datamodel.domain import Domain
-from datamodel.problemtemplate import GenerateQuestion
+from datamodel.problemtemplate import GenerateQuestionForModelProblems
+from modelproblem import ModelProblem
 from appengine_utilities import sessions
 from google.appengine.api import users
 from datamodel.usr import User
@@ -22,11 +21,10 @@ class Quiz(FormHandler):
     domain = Domain.defaultDomain(Domain.externalToInternalType(domainType))
     syllabusUnits = db.get(user.syllabusUnitKeys)
     knowledgeUnits = [s.knowledgeUnit for s in syllabusUnits]
-
+    modelProblems = ModelProblem.findModelProblemsMatchingKnowledgeUnits(knowledgeUnits) 
     problems = []
     while len(problems) < user.numquestions:
-      category = random.choice(Category.allCategories)
-      problem = GenerateQuestion(category, domain, questionType, highlightAnswer)
+      problem = GenerateQuestionForModelProblems(modelProblems, domain, questionType, highlightAnswer)
       if problem:
         problems.append(problem)
 

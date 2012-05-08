@@ -128,8 +128,14 @@ def GenerateQuestion(category, domain, questionType, highlightAnswer):
     solve equations of model problem to generate values of all variables and multiple choice answers and correct answers. (Ignore probability of selection for now)
     Use generated values of variables and answers to instantiate language template and generate verbal problem.
   """
-  modelProblemClass = random.choice(category.modelProblemList)
-  templateList = ProblemTemplate.all().filter('problemName = ', modelProblemClass.__name__).fetch(100)
+  return GenerateQuestionForModelProblems(category.modelProblems, domain, questionType, highlightAnswer)
+
+def GenerateQuestionForModelProblems(modelProblems, domain, questionType, highlightAnswer):
+  if len(modelProblems) == 0:
+    return None;
+  
+  modelProblem = random.choice(modelProblems)
+  templateList = ProblemTemplate.all().filter('problemName = ', modelProblem.__name__).fetch(100)
   if len(templateList) == 0:
     return None
   template = random.choice(templateList)
