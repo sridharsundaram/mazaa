@@ -98,7 +98,7 @@ class LcmProblem(ModelProblem):
     distractorEquationSets = [distractor1, distractor2]
     ModelProblem.__init__(self, varDomains, answerEquationSets, distractorEquationSets)      
 
-  def chooseInitializers(self, variableValues):
+  def proposeInitializers(self, variableValues):
     m1 = self.domain.chooseInitializer()
     m2 = self.domain.chooseInitializer()
     m3 = self.domain.chooseInitializer()
@@ -133,7 +133,7 @@ class GcdProblem(ModelProblem):
     distractorEquationSets = [distractor1, distractor2]
     ModelProblem.__init__(self, varDomains, answerEquationSets, distractorEquationSets)
 
-  def chooseInitializers(self, variableValues):
+  def proposeInitializers(self, variableValues):
     m1 = self.domain.chooseInitializer()
     m2 = self.domain.chooseInitializer()
     m3 = self.domain.chooseInitializer()
@@ -205,7 +205,7 @@ class BodmasProblem(ModelProblem):
     answerEquationSets = [answer]
     ModelProblem.__init__(self, varDomains, answerEquationSets, distractorEquationSets)
   
-  def chooseInitializers(self, variableValues):
+  def proposeInitializers(self, variableValues):
     bodmas = 1
     degreeOfDifficulty = 4
     while not isinstance(bodmas, tuple) or len(bodmas) <= 2: # Ensure at least one operator 

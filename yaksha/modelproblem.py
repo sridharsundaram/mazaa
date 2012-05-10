@@ -105,22 +105,30 @@ class ModelProblem:
     done = False
     while not done:
       done = True
-      initializers = {}
+      initializers = self.proposeInitializers(variableValues)
       values = {} # dictionary with only variables in it
-      for v in variableValues.keys():
-        if v == self.unknown:
-          continue
-        if variableValues[v].value == None:
-          initializers[v] = variableValues[v].domain.chooseInitializer()
-        else:
-          initializers[v] = variableValues[v].value
+      for v in initializers.keys():
         values[v] = initializers[v]
       
-      # check that initializers satisfy all constraints - todo(ssundaram): shouldn't this be done for overridden chooseInitializers?
+      # check that initializers satisfy all constraints
       for c in self.constraints:
         if not c.subs(values):
           done = False
     
+    return initializers
+
+  # @param dict variableValues - dictionary of all variables needed for this problem with Values 
+  # @return dict initializers - mapping variables to their proposed values     
+  def proposeInitializers(self, variableValues):
+    initializers = {}
+    for v in variableValues.keys():
+      if v == self.unknown:
+        continue
+      if variableValues[v].value == None:
+        initializers[v] = variableValues[v].domain.chooseInitializer()
+      else:
+        initializers[v] = variableValues[v].value
+      
     return initializers
 
   # @param lambda fn equationSet - lambda function returning current equation set to extract equations from

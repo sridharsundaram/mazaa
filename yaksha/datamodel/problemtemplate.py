@@ -28,7 +28,8 @@ class ProblemTemplate(FormPolydb):
   # @param Domain defaultVarDomain - default domain of the problem variables
   # @param string questionType - mc for multiple choice, text for enter text
   # @param bool highlightAnswer - true if answer is to be highlighted
-  def generateProblemStatement(self, defaultVarDomain, questionType, highlightAnswer):
+  # @param format - html, text
+  def generateProblemStatement(self, defaultVarDomain, questionType, highlightAnswer, format):
     if not self.varDomains:
       variables = Variable.all().ancestor(self)
       self.varDomains = {}
@@ -50,61 +51,54 @@ class ProblemTemplate(FormPolydb):
     
     distractors = name2Value[self._DISTRACTORS]
     answers = name2Value[self._ANSWERS]
-    body = self.renderBody(name2Value)
-    if questionType == 'mc':
-      answerForm = self.renderMultipleChoice(answers, distractors, modelProblem, modelProblem.unknown, highlightAnswer)
-    elif questionType == 'text':
-      answerForm = self.renderText(answers, modelProblem, modelProblem.unknown, highlightAnswer)
+    body = self.renderBody(name2Value)      
+    answerForm = self.renderAnswers(answers, distractors, modelProblem, modelProblem.unknown, questionType, highlightAnswer, format)
     return body + answerForm
 
   # @param ModelProblem modelProblem - problem being generated
   # @param Symbol unknown - the unknown for which problem is being generated
-  # @param bool highlightAnswer - whether answer is to be highlighted
   # @param answer - value of the unknown variable
-  def renderAnswer(self, modelProblem, unknown, highlightAnswer, answer):
+  def formatAnswer(self, modelProblem, unknown, answer):
     variableValues = modelProblem.variableValues
     if variableValues[unknown].domain.type == Domain.DECIMAL:
-      s = "%0.2f" % answer
+      return "%0.2f" % answer
     else:
-      s = str(answer)
-    return '<span style="color:red">' + s + '</span>' if highlightAnswer else s
+      return str(answer)
 
-  # @param list answers - list of answers to problem
-  # @param ModelProblem modelProblem - problem being generated
-  # @param Symbol unknown - the unknown for which problem is being generated
-  # @param bool highlightAnswer - whether answer is to be highlighted
-  def renderText(self, answers, modelProblem, unknown, highlightAnswer):
-    answerText = ""
-    if answers != None and highlightAnswer:
-      answerText = "<br/>Ans: "
-      for answer in answers:
-        ans = self.renderAnswer(modelProblem, unknown, highlightAnswer, answer)
-        answerText += ans + " "
-    return answerText  
-        
   # @param list answers - list of answers to problem
   # @param list distractors - list of distractors i.e. wrong answers for problem
   # @param ModelProblem modelProblem - problem being generated
   # @param Symbol unknown - the unknown for which problem is being generated
+  # @param str questonType - mc | text
   # @param bool highlightAnswer - whether answer is to be highlighted
-  def renderMultipleChoice(self, answers, distractors,  modelProblem, unknown, highlightAnswer):
+  # @param str format text | html
+  def renderAnswers(self, answers, distractors,  modelProblem, unknown, questionType, highlightAnswer, format):
     choiceList = []
     if answers != None:
       for answer in answers:
-        ans = self.renderAnswer(modelProblem, unknown, highlightAnswer, answer)
-        choiceList.append(ans)
+        ans = self.formatAnswer(modelProblem, unknown, answer)
+        choiceList.append({'text': ans, 'highlight': highlightAnswer})
     if distractors != None:
       for d in distractors:
-        choiceList.append(str(d))
-        
-    random.shuffle(choiceList)
-    choices = ""
-    for choice in choiceList:
-      choices += '<li>' + choice + '</li>'
+        choiceList.append({'text': str(d), 'highlight': False})
 
-    if choices == "":
-      return choices
-    return "<ol type='a'>" + choices + '</ol>'
+    random.shuffle(choiceList)
+    
+    # choose the template for rendering the choices and answers
+    if questionType == 'mc' and format == 'html':
+      qaTemplate = "<ol type='a'> {% for choice in choiceList %}\n<li>{% if choice.highlight %}<span style='color:red'>{{choice.text}}</span>{% else %}{{choice.text}}{% endif %}</li>\n {% endfor %} </ol>"
+    elif questionType == 'text' and format == 'html':
+      qaTemplate = "<br>Ans:  {% for choice in choiceList %}\n{% if choice.highlight %}{{choice.text}} {% endif %}\n {% endfor %}"
+    elif questionType =='mc' and format == 'text':
+      qaTemplate = "{% for choice in choiceList %}\n{% if choice.highlight %}Ans:{% endif %}{{choice.text}}{% endfor %}"
+    elif questionType =='text' and format =='text':
+      qaTemplate = "\nAns:  {% for choice in choiceList %}{% if choice.highlight %}{{choice.text}} {% endif %}{% endfor %}"
+
+    from django.template import Context, Template
+    t = Template(qaTemplate)
+    c = Context({ 'choiceList': choiceList})
+    choices = t.render(c)
+    return choices
 
   # @param dict name2Value - dictionary containing parameter values
   # @param Symbol unknown - the unknown for which problem is being gnerated
@@ -132,7 +126,8 @@ def GenerateQuestionForCategory(category, domain, tags, questionType, highlightA
 # @param tags - list of string tags - at least one must match the template if present.
 # @param questionType - the type of question - None/mc for multiple choice, text for text entry 
 # @param highlightAnswer - true if answer should be displayed
-def GenerateQuestionForModelProblems(modelProblems, domain, tags, questionType, highlightAnswer):
+# @param format - html, text
+def GenerateQuestionForModelProblems(modelProblems, domain, tags, questionType, highlightAnswer, format):
   """
     choose a model problem from among the many.
     choose a language template for this model problem.
@@ -153,4 +148,4 @@ def GenerateQuestionForModelProblems(modelProblems, domain, tags, questionType, 
     return None
   template = random.choice(templateList)
   
-  return template.generateProblemStatement(domain, questionType, highlightAnswer)
+  return template.generateProblemStatement(domain, questionType, highlightAnswer, format)
