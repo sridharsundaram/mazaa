@@ -40,7 +40,7 @@ class YakshaAttachment(FormHandler):
 
 def initialize():
   init.initProblems()
-  init.initTemplatesInDb(force = False)
+  init.initTemplatesInDb(force = True)
   init.initSyllabusInDb()
   
 def main():

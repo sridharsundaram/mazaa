@@ -230,7 +230,7 @@ def initTemplatesInDb(force = False):
   lcm[3] = "Nala has {{num1}}-feet pieces of bridge blocks and Neela has {{num2}}-feet pieces of bridge blocks. How many of each piece would each need to build bridges that are equal in length?"
   for i in range(0,4):
     template = ProblemTemplate(problemName="LcmProblem",
-                               body=gcd[i],
+                               body=lcm[i],
                                variables=[],
                                tags=["ramayana"])
     key = template.put()

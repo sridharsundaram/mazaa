@@ -41,7 +41,7 @@ class ProblemTemplate(FormPolydb):
 
     modelProblemClass = Category.allProblems[self.problemName]
     modelProblem = modelProblemClass(self.varDomains)
-    modelProblem.generateProblem(type)
+    modelProblem.generateProblem(questionType)
 
     name2Value = {}
     for x in modelProblem.variableValues.keys():

@@ -156,9 +156,9 @@ class ModelProblem:
           return subProblem
     return None
     
-  # @param type - mc for multiple choice, text for text entry
+  # @param questionType - mc for multiple choice, text for text entry
   # variableValues - dict of variableValues mapping variables to values
-  def generateProblem(self, type = 'mc'):
+  def generateProblem(self, questionType = 'mc'):
     if self.variableValues.has_key(self.unknown) and self.variableValues[self.unknown].value != None:
       return
     
@@ -166,7 +166,7 @@ class ModelProblem:
     subProblem = self.getSubProblem(variableValues)
     while subProblem != None:
       if not subProblem.variableValues.has_key(subProblem.unknown) or subProblem.variableValues[subProblem.unknown].value == None:
-        subProblem.generateProblem(type)
+        subProblem.generateProblem(questionType)
         subProblem = self.getSubProblem(variableValues)
     
     # Try different initializations and solve, with domain constraints.
@@ -190,7 +190,7 @@ class ModelProblem:
         allEquations += equations
 
       distractorVariables = []
-      if type == 'mc':
+      if questionType == 'mc':
         for equationSet in self.distractorEquationSets:
           (distractorVariable, equations) = self.extractEquations(equationSet, initializers)
           distractorVariables.append(distractorVariable)
@@ -200,8 +200,11 @@ class ModelProblem:
 
     answers, distractors = choices
     numChoices = len(distractors) + len(answers)
-    for _ in range(numChoices, 5):
-      distractors.append(self.variableValues[self.unknown].domain.chooseInitializer())
+    while numChoices < 5:
+      choice = self.variableValues[self.unknown].domain.chooseInitializer()
+      if choice not in answers and choice not in distractors:
+        numChoices += 1
+        distractors.append(choice)
     
     for v in initializers:  
       variableValues[v].value = initializers[v]
