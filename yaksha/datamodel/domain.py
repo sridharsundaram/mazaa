@@ -71,7 +71,7 @@ class Domain:
   @staticmethod
   def defaultDomain(domainType):
     defaultDomains = {
-                      Domain.WHOLE_NUMBER: Domain(type = Domain.WHOLE_NUMBER, low = 3, high = 50),
+                      Domain.WHOLE_NUMBER: Domain(type = Domain.WHOLE_NUMBER, low = 3, high = 10),
                       Domain.INTEGER: Domain(type = Domain.INTEGER, low = 3, high = 50),
                       Domain.DECIMAL: Domain(type = Domain.DECIMAL, low = 0, high = 200),  
                       Domain.REAL: Domain(type = Domain.REAL, low = 0, high = 10000),

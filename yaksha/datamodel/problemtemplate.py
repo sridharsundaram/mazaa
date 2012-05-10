@@ -12,6 +12,7 @@ class ProblemTemplate(FormPolydb):
   body = db.StringProperty()
   author = db.UserProperty(auto_current_user_add=True)
   created = db.DateTimeProperty(auto_now_add = True)
+  tags = db.StringListProperty()
   # dictionary mapping from variable name to its domain
   varDomains = {}
   _DISTRACTORS = ModelProblem._DISTRACTORS.name
@@ -117,25 +118,37 @@ class ProblemTemplate(FormPolydb):
 
 # @param category - which category to choose problem from
 # @param domain - domain to impose on variables in the problem
+# @param tags - list of string tags - at least one must match the template if present.
 # @param questionType - the type of question - None/mc for multiple choice, text for text entry 
 # @param highlightAnswer - true if answer should be displayed
-def GenerateQuestion(category, domain, questionType, highlightAnswer):
+def GenerateQuestionForCategory(category, domain, tags, questionType, highlightAnswer):
   """
-    choose a model problem for this label.
+    choose model problems for this category and generate question + answers
+  """
+  return GenerateQuestionForModelProblems(category.modelProblems, domain, questionType, highlightAnswer)
+
+# @param modelProblems - modelProblems which can be used
+# @param domain - domain to impose on variables in the problem
+# @param tags - list of string tags - at least one must match the template if present.
+# @param questionType - the type of question - None/mc for multiple choice, text for text entry 
+# @param highlightAnswer - true if answer should be displayed
+def GenerateQuestionForModelProblems(modelProblems, domain, tags, questionType, highlightAnswer):
+  """
+    choose a model problem from among the many.
     choose a language template for this model problem.
     choose a variable to fix as answer for model problem.
     generate initializers for remaining variables.
     solve equations of model problem to generate values of all variables and multiple choice answers and correct answers. (Ignore probability of selection for now)
     Use generated values of variables and answers to instantiate language template and generate verbal problem.
   """
-  return GenerateQuestionForModelProblems(category.modelProblems, domain, questionType, highlightAnswer)
-
-def GenerateQuestionForModelProblems(modelProblems, domain, questionType, highlightAnswer):
   if len(modelProblems) == 0:
     return None;
   
   modelProblem = random.choice(modelProblems)
-  templateList = ProblemTemplate.all().filter('problemName = ', modelProblem.__name__).fetch(100)
+  templateQuery = ProblemTemplate.all().filter('problemName = ', modelProblem.__name__)
+  if len(tags) > 0:
+    templateQuery = templateQuery.filter('tags IN ', tags)
+  templateList = templateQuery.fetch(100)
   if len(templateList) == 0:
     return None
   template = random.choice(templateList)

@@ -23,8 +23,11 @@ class Quiz(FormHandler):
     knowledgeUnits = [s.knowledgeUnit for s in syllabusUnits]
     modelProblems = ModelProblem.findModelProblemsMatchingKnowledgeUnits(knowledgeUnits) 
     problems = []
+    tags = self.request.get_all("tag")
+    # Allows sub-selection of templates by matching tags.
+    # At least one tag must match
     while len(problems) < user.numquestions:
-      problem = GenerateQuestionForModelProblems(modelProblems, domain, questionType, highlightAnswer)
+      problem = GenerateQuestionForModelProblems(modelProblems, domain, tags, questionType, highlightAnswer)
       if problem:
         problems.append(problem)
 

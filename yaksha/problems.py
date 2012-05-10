@@ -81,7 +81,7 @@ class InverseProportionRatioProblem(InverseProportionProblem):
 # LCM Problem
 class LcmProblem(ModelProblem):
   num1, num2, lcm = symbols('num1 num2 lcm')
-  domain = Domain(type=Domain.WHOLE_NUMBER, low=2, high=20)
+  domain = Domain(type=Domain.WHOLE_NUMBER, low=2, high=10)
   varDomains = {num1: domain, num2: domain, lcm: domain}
   unknown = lcm
   constraints = [ num1 - num2 ]
@@ -117,7 +117,7 @@ class LcmProblem(ModelProblem):
 class GcdProblem(ModelProblem):
   num1, num2, gcd = symbols('num1 num2 gcd')
   unknown = gcd
-  domain = Domain(type=Domain.WHOLE_NUMBER, low=2, high=20)
+  domain = Domain(type=Domain.WHOLE_NUMBER, low=2, high=10)
   varDomains = {num1: domain, num2: domain, gcd: domain}
   constraints = [ num1 - num2 ]
   knowledgeUnits = ["Gcd"]
