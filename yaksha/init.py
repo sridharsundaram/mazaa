@@ -210,7 +210,7 @@ def initTemplatesInDb(force = False):
 
   gcd = [1,2,3,4]
   gcd[0] = "Neela has two pieces of cloth. One piece is {{num1}} inches wide and the other piece is {{num2}} inches wide. She wants to cut both pieces into strips of equal width that are as wide as possible. How wide should she cut the strips?"
-  gcd[1] = "Jambavan has {{num1}} shields and {{num2}} swords to give to his soldiers. What is the largest # of soldiers he can have in his class so that each soldier gets equal # of shields and equal # of swords?"
+  gcd[1] = "Jambavan has {{num1}} shields and {{num2}} swords to give to his soldiers. What is the largest number of soldiers he can have in his regiment so that each soldier gets equal number of shields and equal number of swords?"
   gcd[2] = "Nala is making a game board that is {{num1}} inches by {{num2}} inches. She wants  to use square tiles. What is the largest tile she can use?"
   gcd[3] = "We have to divide {{num1}} bear soldiers and {{num2}} monkey soldiers in rows. We want to mix the bear and monkey soldiers in the rows, but each row must have the same number of bear and monkey soldiers. What is the maximum number of soldiers we can have per row?"
   for i in range(0,4):
