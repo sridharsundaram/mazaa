@@ -4,6 +4,9 @@ from sympy.core import Symbol, numbers
 from sympy import symbols, ilcm, igcd
 import random
 
+# Global Level for difficulty of questions
+level = 1
+
 # Direct Proportion
 class DirectProportionProblem(ModelProblem):
   quantity1 = Symbol('quantity1')
@@ -82,6 +85,11 @@ class InverseProportionRatioProblem(InverseProportionProblem):
 class LcmProblem(ModelProblem):
   num1, num2, lcm = symbols('num1 num2 lcm')
   domain = Domain(type=Domain.WHOLE_NUMBER, low=2, high=10)
+  
+  # Define difficulty level number set 
+  domain1 = Domain(type=Domain.WHOLE_NUMBER, low=2, high=5)
+  domain2 = Domain(type=Domain.WHOLE_NUMBER, low=4, high=7)
+  domain3 = Domain(type=Domain.WHOLE_NUMBER, low=6, high=9)
   varDomains = {num1: domain, num2: domain, lcm: domain}
   unknown = lcm
   constraints = [ num1 - num2 ]
@@ -91,24 +99,46 @@ class LcmProblem(ModelProblem):
     def answer(num1, num2, lcm):
       return lcm - ilcm(num1, num2)
     answerEquationSets = [answer]
+    # give choices: lcm, gcd, product, product - num1 ,gcd + num2 -1, random
     def distractor1(num1, num2, lcm):
       return lcm - igcd(num1, num2)
     def distractor2(num1, num2, lcm):
       return lcm - num1 * num2
-    distractorEquationSets = [distractor1, distractor2]
+    def distractor3(num1, num2, lcm):
+      return lcm - num1 * num2 - num1
+    def distractor4(num1, num2, lcm):
+      return lcm - num2 + igcd(num1,num2) - 1
+    distractorEquationSets = [distractor1, distractor2, distractor3, distractor4]
     ModelProblem.__init__(self, varDomains, answerEquationSets, distractorEquationSets)      
 
   def proposeInitializers(self, variableValues):
-    m1 = self.domain.chooseInitializer()
-    m2 = self.domain.chooseInitializer()
-    m3 = self.domain.chooseInitializer()
+    
+    global level
+
+    #Random Select three numbers from appropriate set    
+    if level == 1 : 
+        m1 = self.domain1.chooseInitializer()
+        m2 = self.domain1.chooseInitializer()
+        m3 = self.domain1.chooseInitializer()
+    
+    if level == 2 : 
+        m1 = self.domain2.chooseInitializer()
+        m2 = self.domain2.chooseInitializer()
+        m3 = self.domain2.chooseInitializer()
+
+    if level == 3 : 
+        m1 = self.domain3.chooseInitializer()
+        m2 = self.domain3.chooseInitializer()
+        m3 = self.domain3.chooseInitializer()
+    
+    #Make sure that the two random numbers generated have at least one common factor to make the problem interesting
     initializers = {}
     if variableValues[self.num1].value == None and variableValues[self.num1].binding == None:
       initializers[self.num1] = m1 * m2
     else:
       initializers[self.num1] = variableValues[self.num1].value
     if variableValues[self.num2].value == None and variableValues[self.num2].binding == None:
-      initializers[self.num2] = m2 * m3
+      initializers[self.num2] = m2 * m3 
     else:
       initializers[self.num2] = variableValues[self.num2].value
     return initializers
